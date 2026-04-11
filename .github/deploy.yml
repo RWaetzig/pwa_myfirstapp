@@ -1,0 +1,28 @@
+name: Deployment auf Live-Server
+
+on:
+  push:
+    branches:
+      - main  # Führt das Deployment nur aus, wenn in den 'main' Branch gepusht wird
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code auschecken
+        uses: actions/checkout@v4
+
+      - name: Dateien per SSH/rsync übertragen
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: "/var/www/waetzig.net/app"  # Zielpfad auf dem Server
+          SOURCE: "."                      # Welcher Ordner soll kopiert werden?
+          # OPTIONAL: Falls Befehle nach dem Kopieren ausgeführt werden sollen
+          # SCRIPT_AFTER: |
+          #   cd /var/www/waetzig.net/app
+          #   npm install
+          #   pm2 restart my-app
