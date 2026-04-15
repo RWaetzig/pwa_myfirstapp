@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stadtwerke Pirna – App</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ── Tokens ── */
+    :root {
+      --red:        #C8102E;
+      --red-dark:   #9b0b22;
+      --red-light:  #f5e6e9;
+      --red-mid:    rgba(200,16,46,0.10);
+      --white:      #ffffff;
+      --bg:         #f5f5f7;
+      --text:       #1a1a1a;
+      --muted:      #6b6b6b;
+      --border:     #e4e4e4;
+      --radius:     16px;
+      --shadow-sm:  0 2px 12px rgba(0,0,0,0.07);
+      --shadow-md:  0 6px 24px rgba(0,0,0,0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-top: 64px;
+      padding-bottom: 110px;
+    }
+
+    /* ══════════════════════════════
+       TOP HEADER
+    ══════════════════════════════ */
+    #top-header {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1050;
+      height: 64px;
+      display: flex; align-items: center;
+      padding: 0 20px;
+      background: rgba(200,16,46,0.93);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 2px 20px rgba(200,16,46,0.30);
+      transition: background .3s;
+    }
+    #top-header.scrolled {
+      background: rgba(155,11,34,0.97);
+    }
+
+    .header-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .logo-badge {
+      width: 34px; height: 34px;
+      background: white;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; color: var(--red);
+      flex-shrink: 0;
+    }
+    .logo-text {
+      color: white; font-size: .92rem; font-weight: 600; line-height: 1.2;
+    }
+    .logo-text span { display: block; font-weight: 300; font-size: .72rem; opacity: .80; }
+
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+
+    .icon-btn {
+      width: 36px; height: 36px;
+      border: none; background: rgba(255,255,255,0.15);
+      border-radius: 50%; color: white;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .2s;
+      position: relative;
+    }
+    .icon-btn:hover { background: rgba(255,255,255,0.28); }
+    .notif-dot {
+      position: absolute; top: 6px; right: 6px;
+      width: 7px; height: 7px;
+      background: #FFD60A; border-radius: 50%;
+      border: 1.5px solid var(--red);
+    }
+
+    /* ══════════════════════════════
+       HERO GREETING BAND
+    ══════════════════════════════ */
+    .hero-band {
+      background: linear-gradient(135deg, var(--red-dark) 0%, var(--red) 60%, #e8334a 100%);
+      padding: 28px 20px 48px;
+      position: relative; overflow: hidden;
+    }
+    .hero-band::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .hero-band::after {
+      content: '';
+      position: absolute; bottom: -60px; right: 40px;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .hero-greeting { color: rgba(255,255,255,.75); font-size: .85rem; font-weight: 400; }
+    .hero-name { color: white; font-size: 1.45rem; font-weight: 700; margin-top: 2px; }
+
+    /* Wetter-Widget im Hero */
+    .hero-weather {
+      margin-top: 18px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .weather-left { display: flex; align-items: center; gap: 10px; }
+    .weather-icon { font-size: 2rem; }
+    .weather-info { color: white; }
+    .weather-temp { font-size: 1.5rem; font-weight: 600; line-height: 1; }
+    .weather-desc { font-size: .78rem; opacity: .78; margin-top: 2px; }
+    .weather-right { text-align: right; color: rgba(255,255,255,.75); font-size: .78rem; line-height: 1.6; }
+
+    /* ══════════════════════════════
+       PULL-UP CARD (Content over Hero)
+    ══════════════════════════════ */
+    .pull-up {
+      margin-top: -24px;
+      padding: 0 16px;
+      position: relative; z-index: 2;
+    }
+
+    /* ══════════════════════════════
+       SECTION LABEL
+    ══════════════════════════════ */
+    .section-label {
+      font-size: .78rem; font-weight: 600;
+      color: var(--muted); letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 20px 20px 10px;
+    }
+
+    /* ══════════════════════════════
+       QUICK ACCESS GRID
+    ══════════════════════════════ */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 0 16px;
+    }
+    .quick-item {
+      background: white;
+      border-radius: 14px;
+      padding: 14px 8px 12px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: transform .18s, box-shadow .18s;
+      text-decoration: none; color: inherit;
+    }
+    .quick-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .quick-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: var(--red-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; color: var(--red);
+    }
+    .quick-label { font-size: .72rem; font-weight: 500; text-align: center; line-height: 1.2; color: var(--text); }
+
+    /* ══════════════════════════════
+       VERBRAUCH CARD
+    ══════════════════════════════ */
+    .card-white {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .card-header-band {
+      background: var(--red);
+      padding: 14px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-header-band .title { color: white; font-size: .92rem; font-weight: 600; }
+    .card-header-band .subtitle { color: rgba(255,255,255,.72); font-size: .76rem; margin-top: 1px; }
+    .card-header-band .badge-white {
+      background: rgba(255,255,255,0.22);
+      color: white; font-size: .72rem; font-weight: 500;
+      padding: 3px 10px; border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .verbrauch-body { padding: 16px; }
+
+    /* Mini-Balkendiagramm */
+    .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 70px; margin-bottom: 10px; }
+    .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .bar {
+      width: 100%; border-radius: 6px 6px 0 0;
+      background: var(--red-light); transition: background .2s;
+    }
+    .bar.current { background: var(--red); }
+    .bar-label { font-size: .65rem; color: var(--muted); }
+
+    .verbrauch-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+    }
+    .verbrauch-row:first-of-type { border-top: none; margin-top: 4px; }
+    .v-left { display: flex; align-items: center; gap: 10px; }
+    .v-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .v-label { font-size: .85rem; color: var(--text); }
+    .v-sub { font-size: .73rem; color: var(--muted); }
+    .v-val { font-size: .92rem; font-weight: 600; color: var(--text); }
+
+    /* ══════════════════════════════
+       NEWS / MELDUNGEN
+    ══════════════════════════════ */
+    .news-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      display: flex; align-items: stretch;
+      overflow: hidden; cursor: pointer;
+      transition: transform .18s, box-shadow .18s;
+      text-decoration: none; color: inherit;
+    }
+    .news-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .news-accent-bar { width: 5px; background: var(--red); flex-shrink: 0; }
+    .news-accent-bar.warn { background: #FFD60A; }
+    .news-accent-bar.info { background: #30A0E8; }
+    .news-body { padding: 14px 14px 14px 12px; flex: 1; }
+    .news-tag {
+      display: inline-block; font-size: .65rem; font-weight: 600;
+      letter-spacing: .05em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 4px;
+    }
+    .news-tag.warn { color: #b07d00; }
+    .news-tag.info { color: #1a80c0; }
+    .news-title { font-size: .9rem; font-weight: 600; line-height: 1.35; }
+    .news-meta { font-size: .73rem; color: var(--muted); margin-top: 5px; }
+    .news-icon-wrap { padding: 14px 14px 14px 4px; display: flex; align-items: center; }
+    .news-icon-wrap i { font-size: 1.1rem; color: var(--muted); }
+
+    /* ══════════════════════════════
+       NOTFALL BANNER
+    ══════════════════════════════ */
+    .emergency-banner {
+      background: var(--red);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 4px 20px rgba(200,16,46,0.30);
+    }
+    .emergency-icon {
+      width: 46px; height: 46px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; color: white; flex-shrink: 0;
+    }
+    .emergency-text { flex: 1; }
+    .emergency-text strong { color: white; font-size: .92rem; display: block; }
+    .emergency-text span { color: rgba(255,255,255,.80); font-size: .78rem; }
+    .emergency-tel {
+      background: white; color: var(--red);
+      font-size: .8rem; font-weight: 700;
+      padding: 7px 13px; border-radius: 30px;
+      text-decoration: none; flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    /* ══════════════════════════════
+       SERVICE LIST
+    ══════════════════════════════ */
+    .service-list { padding: 0 16px; display: flex; flex-direction: column; gap: 2px; }
+    .service-item {
+      background: white;
+      border-radius: 0;
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px;
+      cursor: pointer; text-decoration: none; color: inherit;
+      transition: background .15s;
+      border-bottom: 1px solid var(--border);
+    }
+    .service-item:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .service-item:last-child  { border-radius: 0 0 var(--radius) var(--radius); border-bottom: none; }
+    .service-item:only-child  { border-radius: var(--radius); border-bottom: none; }
+    .service-item:hover { background: var(--red-light); }
+    .service-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--red-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; color: var(--red); flex-shrink: 0;
+    }
+    .service-label { flex: 1; }
+    .service-label strong { display: block; font-size: .9rem; font-weight: 600; }
+    .service-label span   { font-size: .77rem; color: var(--muted); }
+    .service-arrow { color: var(--muted); font-size: .85rem; }
+
+    /* ══════════════════════════════
+       BOTTOM NAV — Die Zeit Liquid Glass Style
+       Floatend, nicht am Rand geklebt,
+       halbtransparent mit Blur
+    ══════════════════════════════ */
+    #bottom-bar {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1050;
+      width: auto;
+      max-width: 340px;
+      min-width: 280px;
+      height: 64px;
+      background: rgba(255,255,255,0.70);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.90);
+      border-radius: 32px;
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.13),
+        0 2px 8px rgba(0,0,0,0.07),
+        inset 0 1px 0 rgba(255,255,255,0.80);
+      display: flex; align-items: center; justify-content: space-around;
+      padding: 0 10px;
+    }
+
+    .nav-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      background: none; border: none; cursor: pointer;
+      color: #888; font-size: .62rem; font-weight: 600;
+      letter-spacing: .03em;
+      padding: 6px 10px; border-radius: 22px;
+      transition: color .2s, background .2s;
+      text-decoration: none;
+      flex: 1;
+    }
+    .nav-btn .nb-icon {
+      font-size: 1.25rem;
+      transition: transform .18s, color .2s;
+      line-height: 1;
+    }
+    .nav-btn:hover { color: var(--red); }
+    .nav-btn:hover .nb-icon { transform: translateY(-2px); }
+
+    .nav-btn.active { color: var(--red); }
+    .nav-btn.active .nb-icon { color: var(--red); }
+
+    /* aktiver Pill-Indikator */
+    .nav-btn.active {
+      background: rgba(200,16,46,0.10);
+    }
+
+    /* ══════════════════════════════
+       SPACING HELPERS
+    ══════════════════════════════ */
+    .px-content { padding-left: 16px; padding-right: 16px; }
+    .mt-section { margin-top: 6px; }
+    .mb-last   { margin-bottom: 24px; }
+
+    /* fade-in on load */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp .4s ease both; }
+    .fade-up:nth-child(2) { animation-delay: .07s; }
+    .fade-up:nth-child(3) { animation-delay: .14s; }
+    .fade-up:nth-child(4) { animation-delay: .21s; }
+  </style>
+</head>
+<body>
+
+  <!-- ════ TOP HEADER ════ -->
+  <header id="top-header">
+    <a href="#" class="header-logo">
+      <div class="logo-badge">SW</div>
+      <div class="logo-text">
+        Stadtwerke Pirna
+        <span>Meine App</span>
+      </div>
+    </a>
+    <div class="header-right">
+      <button class="icon-btn" aria-label="Benachrichtigungen">
+        <i class="bi bi-bell"></i>
+        <span class="notif-dot"></span>
+      </button>
+      <button class="icon-btn" aria-label="Profil">
+        <i class="bi bi-person"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ════ MAIN ════ -->
+  <main>
+
+    <!-- Hero Greeting -->
+    <div class="hero-band">
+      <div class="hero-greeting">Guten Morgen,</div>
+      <div class="hero-name">Max Mustermann 👋</div>
+      <div class="hero-weather mt-3">
+        <div class="weather-left">
+          <div class="weather-icon">⛅</div>
+          <div class="weather-info">
+            <div class="weather-temp">14 °C</div>
+            <div class="weather-desc">Leicht bewölkt · Pirna</div>
+          </div>
+        </div>
+        <div class="weather-right">
+          Elbe: <strong style="color:white">2.34 m</strong><br/>
+          Luftfeuchte: 68 %
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Access -->
+    <div class="section-label">Schnellzugriff</div>
+    <div class="quick-grid">
+      <a href="#" class="quick-item fade-up">
+        <div class="quick-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+        <div class="quick-label">Zähler­stand</div>
+      </a>
+      <a href="#" class="quick-item fade-up">
+        <div class="quick-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
+        <div class="quick-label">Rechnungen</div>
+      </a>
+      <a href="#" class="quick-item fade-up">
+        <div class="quick-icon"><i class="bi bi-credit-card-fill"></i></div>
+        <div class="quick-label">Zahlung</div>
+      </a>
+      <a href="#" class="quick-item fade-up">
+        <div class="quick-icon"><i class="bi bi-chat-dots-fill"></i></div>
+        <div class="quick-label">Kontakt</div>
+      </a>
+    </div>
+
+    <!-- Verbrauch Card -->
+    <div class="section-label">Mein Verbrauch</div>
+    <div class="px-content">
+      <div class="card-white">
+        <div class="card-header-band">
+          <div>
+            <div class="title">Stromverbrauch</div>
+            <div class="subtitle">Kundennummer 123 456 78</div>
+          </div>
+          <span class="badge-white">April 2026</span>
+        </div>
+        <div class="verbrauch-body">
+          <!-- Mini Bar Chart -->
+          <div class="bar-chart">
+            <div class="bar-wrap"><div class="bar" style="height:45px"></div><div class="bar-label">Jan</div></div>
+            <div class="bar-wrap"><div class="bar" style="height:52px"></div><div class="bar-label">Feb</div></div>
+            <div class="bar-wrap"><div class="bar" style="height:38px"></div><div class="bar-label">Mär</div></div>
+            <div class="bar-wrap"><div class="bar current" style="height:61px"></div><div class="bar-label">Apr</div></div>
+            <div class="bar-wrap"><div class="bar" style="height:28px"></div><div class="bar-label">Mai</div></div>
+            <div class="bar-wrap"><div class="bar" style="height:22px"></div><div class="bar-label">Jun</div></div>
+          </div>
+          <div class="verbrauch-row">
+            <div class="v-left">
+              <div class="v-dot" style="background:var(--red)"></div>
+              <div><div class="v-label">Strom</div><div class="v-sub">Aktueller Monat</div></div>
+            </div>
+            <div class="v-val">287 kWh</div>
+          </div>
+          <div class="verbrauch-row">
+            <div class="v-left">
+              <div class="v-dot" style="background:#30A0E8"></div>
+              <div><div class="v-label">Wasser</div><div class="v-sub">Aktueller Monat</div></div>
+            </div>
+            <div class="v-val">4,2 m³</div>
+          </div>
+          <div class="verbrauch-row">
+            <div class="v-left">
+              <div class="v-dot" style="background:#FF9500"></div>
+              <div><div class="v-label">Fernwärme</div><div class="v-sub">Aktueller Monat</div></div>
+            </div>
+            <div class="v-val">38 kWh</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notfall Banner -->
+    <div class="section-label">Notdienst</div>
+    <div class="px-content">
+      <div class="emergency-banner">
+        <div class="emergency-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+        <div class="emergency-text">
+          <strong>Notfall-Hotline</strong>
+          <span>24 h erreichbar für Havarien</span>
+        </div>
+        <a href="tel:+493501764444" class="emergency-tel">03501 76 44 44</a>
+      </div>
+    </div>
+
+    <!-- News / Meldungen -->
+    <div class="section-label">Aktuelles</div>
+    <div class="px-content" style="display:flex;flex-direction:column;gap:10px;">
+      <a href="#" class="news-card">
+        <div class="news-accent-bar warn"></div>
+        <div class="news-body">
+          <div class="news-tag warn">⚠ Baustelle</div>
+          <div class="news-title">Leitungsarbeiten Gartenstraße – Sperrung bis 18.04.</div>
+          <div class="news-meta">12. April 2026</div>
+        </div>
+        <div class="news-icon-wrap"><i class="bi bi-chevron-right"></i></div>
+      </a>
+      <a href="#" class="news-card">
+        <div class="news-accent-bar"></div>
+        <div class="news-body">
+          <div class="news-tag">Tarife</div>
+          <div class="news-title">Neue Stromtarife ab Mai 2026 – jetzt vergleichen</div>
+          <div class="news-meta">08. April 2026</div>
+        </div>
+        <div class="news-icon-wrap"><i class="bi bi-chevron-right"></i></div>
+      </a>
+      <a href="#" class="news-card">
+        <div class="news-accent-bar info"></div>
+        <div class="news-body">
+          <div class="news-tag info">+CARD Event</div>
+          <div class="news-title">Konzert im Stadtpark – Tickets jetzt buchbar</div>
+          <div class="news-meta">05. April 2026</div>
+        </div>
+        <div class="news-icon-wrap"><i class="bi bi-chevron-right"></i></div>
+      </a>
+    </div>
+
+    <!-- Service Links -->
+    <div class="section-label mt-section">Services</div>
+    <div class="service-list mb-last">
+      <a href="#" class="service-item">
+        <div class="service-icon"><i class="bi bi-lightning-fill"></i></div>
+        <div class="service-label">
+          <strong>Strom</strong>
+          <span>Tarife, Zählerstand, Messdaten</span>
+        </div>
+        <i class="bi bi-chevron-right service-arrow"></i>
+      </a>
+      <a href="#" class="service-item">
+        <div class="service-icon"><i class="bi bi-droplet-fill"></i></div>
+        <div class="service-label">
+          <strong>Trinkwasser</strong>
+          <span>Qualität, Verbrauch, Anschluss</span>
+        </div>
+        <i class="bi bi-chevron-right service-arrow"></i>
+      </a>
+      <a href="#" class="service-item">
+        <div class="service-icon"><i class="bi bi-thermometer-half"></i></div>
+        <div class="service-label">
+          <strong>Fernwärme</strong>
+          <span>Tarife & Netzanschluss</span>
+        </div>
+        <i class="bi bi-chevron-right service-arrow"></i>
+      </a>
+      <a href="#" class="service-item">
+        <div class="service-icon"><i class="bi bi-ev-station-fill"></i></div>
+        <div class="service-label">
+          <strong>E-Mobilität</strong>
+          <span>Ladestationen in Pirna</span>
+        </div>
+        <i class="bi bi-chevron-right service-arrow"></i>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- ════ BOTTOM NAV ════ -->
+  <nav id="bottom-bar" aria-label="Hauptnavigation">
+    <a href="#" class="nav-btn active" aria-label="Home">
+      <div class="nb-icon"><i class="bi bi-house-fill"></i></div>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-btn" aria-label="Verbrauch">
+      <div class="nb-icon"><i class="bi bi-bar-chart-fill"></i></div>
+      <span>Verbrauch</span>
+    </a>
+    <a href="#" class="nav-btn" aria-label="Rechnung">
+      <div class="nb-icon"><i class="bi bi-receipt"></i></div>
+      <span>Rechnung</span>
+    </a>
+    <a href="#" class="nav-btn" aria-label="Profil">
+      <div class="nb-icon"><i class="bi bi-person-fill"></i></div>
+      <span>Profil</span>
+    </a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Sticky header scroll effect
+    const header = document.getElementById('top-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 30);
+    }, { passive: true });
+
+    // Bottom nav active state
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

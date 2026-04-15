@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>NACHRICHTEN</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --red:       #C8102E;
+      --red-dark:  #9b0b22;
+      --red-faint: #fdf2f4;
+      --red-mid:   rgba(200,16,46,0.10);
+      --black:     #0d0d0d;
+      --near-black:#1a1a1a;
+      --grey-1:    #f4f4f4;
+      --grey-2:    #e8e8e8;
+      --grey-3:    #999;
+      --white:     #ffffff;
+      --border:    #e2e2e2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--white);
+      color: var(--near-black);
+      min-height: 100vh;
+      padding-top: 108px;   /* header height */
+      padding-bottom: 72px; /* footer height */
+      overscroll-behavior-y: contain;
+    }
+
+    /* ════════════════════════════════════════════
+       FIXED TOP HEADER
+    ════════════════════════════════════════════ */
+    #top-header {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1060;
+      background: var(--red);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    }
+
+    /* — Masthead row — */
+    .masthead {
+      display: flex; align-items: center;
+      padding: 0 16px;
+      height: 56px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .masthead-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.65rem; font-weight: 900;
+      color: var(--white);
+      letter-spacing: -.01em;
+      text-decoration: none;
+      line-height: 1;
+      flex: 1;
+    }
+    .masthead-logo span {
+      display: inline-block;
+      background: var(--white);
+      color: var(--red);
+      padding: 1px 7px 2px;
+      border-radius: 3px;
+      margin-right: 4px;
+    }
+
+    .masthead-actions { display: flex; align-items: center; gap: 4px; }
+    .hdr-btn {
+      width: 36px; height: 36px;
+      border: none; background: rgba(255,255,255,0.15);
+      border-radius: 50%; color: white; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .2s; position: relative;
+      flex-shrink: 0;
+    }
+    .hdr-btn:hover { background: rgba(255,255,255,0.28); }
+    .hdr-btn .badge-dot {
+      position: absolute; top: 6px; right: 6px;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #FFD60A;
+      border: 1.5px solid var(--red);
+    }
+
+    /* — Ressort tab bar — */
+    .ressort-bar {
+      display: flex; align-items: center;
+      height: 44px;
+      overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 8px;
+      gap: 2px;
+    }
+    .ressort-bar::-webkit-scrollbar { display: none; }
+
+    .ressort-tab {
+      flex-shrink: 0;
+      padding: 5px 14px;
+      border: none; background: transparent;
+      color: rgba(255,255,255,0.70);
+      font-family: 'Barlow', sans-serif;
+      font-size: .78rem; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer; transition: color .2s, background .2s;
+      white-space: nowrap;
+    }
+    .ressort-tab:hover { color: white; background: rgba(255,255,255,0.10); }
+    .ressort-tab.active {
+      color: var(--red);
+      background: var(--white);
+    }
+
+    /* ════════════════════════════════════════════
+       BREAKING NEWS TICKER
+    ════════════════════════════════════════════ */
+    .breaking-bar {
+      background: var(--red-dark);
+      color: white;
+      display: flex; align-items: center;
+      padding: 0 16px;
+      height: 34px;
+      font-size: .74rem; font-weight: 600;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+    .breaking-label {
+      background: white; color: var(--red);
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 3px;
+      margin-right: 12px; flex-shrink: 0;
+    }
+    .ticker-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: rgba(255,255,255,.90);
+      font-weight: 400;
+    }
+    .ticker-sep { margin: 0 10px; opacity: .4; }
+
+    /* ════════════════════════════════════════════
+       MAIN CONTENT
+    ════════════════════════════════════════════ */
+
+    /* — Aufmacher (Hero Article) — */
+    .aufmacher {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .aufmacher-img {
+      width: 100%; height: 240px;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, #6b0010 0%, var(--red) 50%, #ff4d63 100%);
+    }
+    /* Placeholder image with SVG background */
+    .aufmacher-img-placeholder {
+      width: 100%; height: 240px;
+      background: linear-gradient(145deg, #7b0a14 0%, var(--red) 60%, #e8334a 100%);
+      position: relative; overflow: hidden;
+      display: flex; align-items: flex-end;
+    }
+    .aufmacher-img-placeholder::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 70% 30%, rgba(255,255,255,0.06) 0%, transparent 60%),
+        radial-gradient(circle at 20% 80%, rgba(0,0,0,0.15) 0%, transparent 50%);
+    }
+    .img-icon-bg {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-60%);
+      font-size: 5rem; color: rgba(255,255,255,.12);
+    }
+
+    .aufmacher-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+      padding: 24px 16px 16px;
+    }
+    .aufmacher-ressort {
+      display: inline-block;
+      background: var(--red); color: white;
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 2px 8px; border-radius: 3px;
+      margin-bottom: 8px;
+    }
+    .aufmacher-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 800;
+      color: white; line-height: 1.25;
+      margin-bottom: 6px;
+    }
+    .aufmacher-lead {
+      font-size: .8rem; color: rgba(255,255,255,.78);
+      line-height: 1.4; font-family: 'Source Serif 4', serif;
+    }
+
+    /* — Section Header — */
+    .section-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 16px 10px;
+      border-bottom: 2px solid var(--red);
+    }
+    .section-head .title {
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .10em; text-transform: uppercase;
+      color: var(--red);
+    }
+    .section-head .more {
+      font-size: .72rem; color: var(--red); font-weight: 600;
+      text-decoration: none; display: flex; align-items: center; gap: 3px;
+    }
+
+    /* — Artikel Kachel (horizontal, Bild rechts wie Welt App) — */
+    .article-list { padding: 0; }
+    .article-item {
+      display: flex; align-items: flex-start;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer; text-decoration: none; color: inherit;
+      gap: 14px;
+      transition: background .15s;
+    }
+    .article-item:hover { background: var(--red-faint); }
+    .article-item:last-child { border-bottom: none; }
+
+    .article-text { flex: 1; min-width: 0; }
+    .article-kicker {
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 4px;
+    }
+    .article-headline {
+      font-family: 'Source Serif 4', serif;
+      font-size: .97rem; font-weight: 600;
+      line-height: 1.35; color: var(--near-black);
+      margin-bottom: 5px;
+    }
+    .article-meta {
+      font-size: .72rem; color: var(--grey-3);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .article-meta i { font-size: .7rem; }
+
+    .article-thumb {
+      width: 84px; height: 64px;
+      border-radius: 6px; flex-shrink: 0;
+      object-fit: cover;
+      background: linear-gradient(135deg, var(--red-dark), var(--red));
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.25); font-size: 1.6rem;
+      overflow: hidden; position: relative;
+    }
+    .article-thumb::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg,
+        rgba(200,16,46,0.7) 0%,
+        rgba(150,5,20,0.8) 100%);
+    }
+    .article-thumb i { position: relative; z-index: 1; }
+
+    /* Thumb colour variants */
+    .thumb-blue  { background: linear-gradient(135deg,#1a4a7a,#2980b9); }
+    .thumb-green { background: linear-gradient(135deg,#0a5c36,#27ae60); }
+    .thumb-grey  { background: linear-gradient(135deg,#3a3a3a,#6b6b6b); }
+    .thumb-amber { background: linear-gradient(135deg,#7a3a00,#e67e22); }
+
+    /* — Horizontaler Artikel-Slider — */
+    .h-scroll-row {
+      display: flex;
+      gap: 12px;
+      padding: 12px 16px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .h-scroll-row::-webkit-scrollbar { display: none; }
+
+    .h-card {
+      flex-shrink: 0; width: 160px;
+      cursor: pointer; text-decoration: none; color: inherit;
+    }
+    .h-card-img {
+      width: 160px; height: 100px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; color: rgba(255,255,255,.25);
+      margin-bottom: 8px; position: relative; overflow: hidden;
+    }
+    .h-card-img::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);
+    }
+    .h-card-img i { position: relative; z-index: 1; }
+    .h-card-kicker { font-size: .62rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--red); margin-bottom: 3px; }
+    .h-card-title {
+      font-family: 'Source Serif 4', serif;
+      font-size: .83rem; font-weight: 600;
+      line-height: 1.3; color: var(--near-black);
+    }
+
+    /* — Meinung / Kommentar Block — */
+    .meinung-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .meinung-item:hover { background: var(--red-faint); }
+    .meinung-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--red-dark), var(--red));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1rem; flex-shrink: 0;
+      font-weight: 700; font-family: 'Playfair Display', serif;
+    }
+    .meinung-text {}
+    .meinung-label { font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--red); margin-bottom: 3px; }
+    .meinung-title { font-family: 'Source Serif 4', serif; font-size: .92rem; font-weight: 600; line-height: 1.35; color: var(--near-black); margin-bottom: 3px; }
+    .meinung-author { font-size: .73rem; color: var(--grey-3); font-style: italic; }
+
+    /* — Divider — */
+    .content-divider { height: 8px; background: var(--grey-1); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    /* ════════════════════════════════════════════
+       FIXED BOTTOM NAV
+    ════════════════════════════════════════════ */
+    #bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 1060;
+      height: 64px;
+      background: var(--red);
+      border-top: 1px solid var(--red-dark);
+      display: flex; align-items: stretch;
+      box-shadow: 0 -2px 16px rgba(0,0,0,0.15);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 3px;
+      background: transparent; border: none;
+      color: rgba(255,255,255,0.55);
+      font-size: .6rem; font-weight: 600;
+      letter-spacing: .04em; text-transform: uppercase;
+      cursor: pointer; text-decoration: none;
+      transition: color .18s, background .18s;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-item:last-child { border-right: none; }
+    .nav-item i { font-size: 1.2rem; transition: transform .18s; }
+
+    .nav-item:hover {
+      color: white;
+      background: rgba(255,255,255,0.08);
+    }
+    .nav-item:hover i { transform: translateY(-2px); }
+
+    .nav-item.active {
+      color: white;
+      background: rgba(255,255,255,0.12);
+    }
+    .nav-item.active i { color: white; }
+
+    /* active indicator line at top */
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 28px; height: 2px;
+      background: white;
+      border-radius: 0 0 3px 3px;
+    }
+    .nav-item { position: relative; }
+
+    /* ════════════════════════════════════════════
+       FADE-IN ANIMATIONS
+    ════════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fu { animation: fadeUp .35s ease both; }
+    .fu-1 { animation-delay: .05s; }
+    .fu-2 { animation-delay: .10s; }
+    .fu-3 { animation-delay: .15s; }
+    .fu-4 { animation-delay: .20s; }
+    .fu-5 { animation-delay: .25s; }
+  </style>
+</head>
+<body>
+
+  <!-- ════ FIXED TOP HEADER ════ -->
+  <header id="top-header">
+
+    <!-- Masthead -->
+    <div class="masthead">
+      <a href="#" class="masthead-logo">
+        <span>N</span>ACHRICHTEN
+      </a>
+      <div class="masthead-actions">
+        <button class="hdr-btn" aria-label="Suche"><i class="bi bi-search"></i></button>
+        <button class="hdr-btn" aria-label="Benachrichtigungen">
+          <i class="bi bi-bell"></i>
+          <span class="badge-dot"></span>
+        </button>
+        <button class="hdr-btn" aria-label="Profil"><i class="bi bi-person"></i></button>
+      </div>
+    </div>
+
+    <!-- Ressort Tabs -->
+    <nav class="ressort-bar" aria-label="Ressorts">
+      <button class="ressort-tab active">Startseite</button>
+      <button class="ressort-tab">Politik</button>
+      <button class="ressort-tab">Wirtschaft</button>
+      <button class="ressort-tab">Kultur</button>
+      <button class="ressort-tab">Wissen</button>
+      <button class="ressort-tab">Sport</button>
+      <button class="ressort-tab">Panorama</button>
+      <button class="ressort-tab">Meinung</button>
+      <button class="ressort-tab">Reise</button>
+    </nav>
+  </header>
+
+  <!-- ════ MAIN SCROLL CONTENT ════ -->
+  <main>
+
+    <!-- Breaking News Ticker -->
+    <div class="breaking-bar fu">
+      <span class="breaking-label">Breaking</span>
+      <span class="ticker-text">
+        Bundesregierung beschließt neues Energiepaket
+        <span class="ticker-sep">·</span>
+        EZB lässt Leitzins unverändert
+        <span class="ticker-sep">·</span>
+        Sturm „Kira" nähert sich der Küste
+      </span>
+    </div>
+
+    <!-- Aufmacher -->
+    <article class="aufmacher fu fu-1">
+      <div class="aufmacher-img-placeholder">
+        <i class="bi bi-globe img-icon-bg"></i>
+        <div class="aufmacher-overlay">
+          <span class="aufmacher-ressort">Politik</span>
+          <h1 class="aufmacher-headline">Europa steht vor der größten Haushaltsreform seit Jahrzehnten</h1>
+          <p class="aufmacher-lead">Die EU-Kommission legt heute ihren Entwurf für den neuen Mehrjährigen Finanzrahmen vor – mit weitreichenden Konsequenzen.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Top-Themen Section -->
+    <div class="section-head fu fu-2">
+      <span class="title">Top-Themen</span>
+      <a href="#" class="more">Alle <i class="bi bi-chevron-right"></i></a>
+    </div>
+
+    <div class="article-list fu fu-2">
+
+      <a href="#" class="article-item">
+        <div class="article-text">
+          <div class="article-kicker">Wirtschaft</div>
+          <div class="article-headline">DAX schließt auf neuem Jahreshoch – Anleger reagieren verhalten</div>
+          <div class="article-meta">
+            <i class="bi bi-clock"></i> Vor 23 Min.
+            <i class="bi bi-chat"></i> 142
+          </div>
+        </div>
+        <div class="article-thumb thumb-green"><i class="bi bi-graph-up-arrow"></i></div>
+      </a>
+
+      <a href="#" class="article-item">
+        <div class="article-text">
+          <div class="article-kicker">Wissenschaft</div>
+          <div class="article-headline">Forscher entdecken mögliche Signale extraterrestrischen Ursprungs</div>
+          <div class="article-meta">
+            <i class="bi bi-clock"></i> Vor 1 Std.
+            <i class="bi bi-chat"></i> 89
+          </div>
+        </div>
+        <div class="article-thumb thumb-blue"><i class="bi bi-stars"></i></div>
+      </a>
+
+      <a href="#" class="article-item">
+        <div class="article-text">
+          <div class="article-kicker">Sport</div>
+          <div class="article-headline">Nationalmannschaft: Nagelsmann kündigt überraschende Kaderumstellungen an</div>
+          <div class="article-meta">
+            <i class="bi bi-clock"></i> Vor 2 Std.
+            <i class="bi bi-chat"></i> 317
+          </div>
+        </div>
+        <div class="article-thumb thumb-amber"><i class="bi bi-trophy-fill"></i></div>
+      </a>
+
+      <a href="#" class="article-item">
+        <div class="article-text">
+          <div class="article-kicker">Panorama</div>
+          <div class="article-headline">Bürgermeisterin tritt zurück: Affäre erschüttert mittelgroße Stadt</div>
+          <div class="article-meta">
+            <i class="bi bi-clock"></i> Vor 3 Std.
+            <i class="bi bi-chat"></i> 58
+          </div>
+        </div>
+        <div class="article-thumb thumb-grey"><i class="bi bi-building"></i></div>
+      </a>
+
+    </div>
+
+    <!-- Divider -->
+    <div class="content-divider"></div>
+
+    <!-- Meistgelesen Slider -->
+    <div class="section-head fu fu-3">
+      <span class="title">Meistgelesen</span>
+      <a href="#" class="more">Alle <i class="bi bi-chevron-right"></i></a>
+    </div>
+
+    <div class="h-scroll-row fu fu-3">
+      <a href="#" class="h-card">
+        <div class="h-card-img" style="background:linear-gradient(135deg,#7b0a14,var(--red));"><i class="bi bi-lightning-fill"></i></div>
+        <div class="h-card-kicker">Energie</div>
+        <div class="h-card-title">Strompreise sinken – aber nur kurz</div>
+      </a>
+      <a href="#" class="h-card">
+        <div class="h-card-img thumb-blue"><i class="bi bi-airplane-fill"></i></div>
+        <div class="h-card-kicker">Reise</div>
+        <div class="h-card-title">Diese Destinationen boomen 2026</div>
+      </a>
+      <a href="#" class="h-card">
+        <div class="h-card-img thumb-green"><i class="bi bi-leaf-fill"></i></div>
+        <div class="h-card-kicker">Klima</div>
+        <div class="h-card-title">Kipppunkte früher als erwartet</div>
+      </a>
+      <a href="#" class="h-card">
+        <div class="h-card-img thumb-amber"><i class="bi bi-cpu-fill"></i></div>
+        <div class="h-card-kicker">KI</div>
+        <div class="h-card-title">Wenn das Modell lügt – und keiner merkt es</div>
+      </a>
+      <a href="#" class="h-card">
+        <div class="h-card-img thumb-grey"><i class="bi bi-bank2"></i></div>
+        <div class="h-card-kicker">Geldanlage</div>
+        <div class="h-card-title">Gold oder ETF? Was Experten jetzt raten</div>
+      </a>
+    </div>
+
+    <!-- Divider -->
+    <div class="content-divider"></div>
+
+    <!-- Meinung Section -->
+    <div class="section-head fu fu-4">
+      <span class="title">Meinung</span>
+      <a href="#" class="more">Alle <i class="bi bi-chevron-right"></i></a>
+    </div>
+
+    <div class="fu fu-4">
+      <div class="meinung-item">
+        <div class="meinung-avatar">MK</div>
+        <div class="meinung-text">
+          <div class="meinung-label">Kommentar</div>
+          <div class="meinung-title">Der Westen schaut zu – und verliert seinen Ruf</div>
+          <div class="meinung-author">Maria König, Außenpolitik-Korrespondentin</div>
+        </div>
+      </div>
+      <div class="meinung-item">
+        <div class="meinung-avatar" style="background:linear-gradient(135deg,#1a4a7a,#2980b9);">TH</div>
+        <div class="meinung-text">
+          <div class="meinung-label">Analyse</div>
+          <div class="meinung-title">Warum die Schuldenbremse reformiert werden muss</div>
+          <div class="meinung-author">Thomas Hartmann, Wirtschaftsredakteur</div>
+        </div>
+      </div>
+      <div class="meinung-item">
+        <div class="meinung-avatar" style="background:linear-gradient(135deg,#0a5c36,#27ae60);">SB</div>
+        <div class="meinung-text">
+          <div class="meinung-label">Essay</div>
+          <div class="meinung-title">Glück als politisches Ziel: eine unterschätzte Kategorie</div>
+          <div class="meinung-author">Sandra Beck, Philosophin</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="content-divider"></div>
+
+    <!-- Weitere Nachrichten -->
+    <div class="section-head fu fu-5">
+      <span class="title">Weitere Nachrichten</span>
+    </div>
+
+    <div class="article-list fu fu-5">
+      <a href="#" class="article-item">
+        <div class="article-text">
+          <div class="article-kicker">Kultur</div>
+          <div class="article-headline">Berliner Philharmoniker wählen neue Chefdirigentin</div>
+          <div class="article-meta"><i class="bi bi-clock"></i> Vor 4 Std.</div>
+        </div>
+        <div class="article-thumb" style="background:linear-gradient(135deg,#4a0050,#9b59b6)"><i class="bi bi-music-note-beamed"></i></div>
+      </a>
+      <a href="#" class="article-item">
+        <div class="article-text">
+          <div class="article-kicker">Gesundheit</div>
+          <div class="article-headline">Neue Studie: Schlafen vor Mitternacht entscheidend für Herzgesundheit</div>
+          <div class="article-meta"><i class="bi bi-clock"></i> Vor 5 Std.</div>
+        </div>
+        <div class="article-thumb thumb-green"><i class="bi bi-heart-pulse-fill"></i></div>
+      </a>
+      <a href="#" class="article-item">
+        <div class="article-text">
+          <div class="article-kicker">Technologie</div>
+          <div class="article-headline">Apple stellt neues Mixed-Reality-Headset vor</div>
+          <div class="article-meta"><i class="bi bi-clock"></i> Vor 6 Std.</div>
+        </div>
+        <div class="article-thumb thumb-grey"><i class="bi bi-badge-vr-fill"></i></div>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- ════ FIXED BOTTOM NAV ════ -->
+  <nav id="bottom-nav" aria-label="Hauptnavigation">
+    <a href="#" class="nav-item active" aria-label="Home">
+      <i class="bi bi-house-fill"></i>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-item" aria-label="Entdecken">
+      <i class="bi bi-compass-fill"></i>
+      <span>Entdecken</span>
+    </a>
+    <a href="#" class="nav-item" aria-label="Suche">
+      <i class="bi bi-search"></i>
+      <span>Suche</span>
+    </a>
+    <a href="#" class="nav-item" aria-label="Mein Konto">
+      <i class="bi bi-person-fill"></i>
+      <span>Konto</span>
+    </a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Ressort tabs
+    document.querySelectorAll('.ressort-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.ressort-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+
+    // Bottom nav
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
