@@ -52,11 +52,17 @@ body {
 }
 
 /* Top Header */
+.app-header {
+    height: 85px;
+    padding: 0 20px;
+    background: var(--app-color-red);
+}
 .top-header {
     position: fixed; top: 0; left: 0; right: 0;
     z-index: 1050;
     height: 65px;
-    display: flex; align-items: center;
+    display: flex;
+    align-items: center;
     padding: 0 20px;
     background: var(--app-color-red);
 }
@@ -99,6 +105,9 @@ body {
     align-items: center;
     gap: 5px;
 }
+.app-header-right {
+    gap: 5px;
+}
 .icon-btn {
     width: 40px;
     height: 40px;
@@ -116,4 +125,34 @@ body {
 }
 .icon-btn:hover {
     background: rgba(255,255,255,0.38);
+}
+
+/* — Ressort tab bar — */
+.ressort-bar {
+    display: flex; align-items: center;
+    height: 44px;
+    overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 8px;
+    gap: 2px;
+}
+.ressort-bar::-webkit-scrollbar { display: none; }
+
+.ressort-tab {
+    flex-shrink: 0;
+    padding: 5px 14px;
+    border: none; background: transparent;
+    color: rgba(255,255,255,0.70);
+    font-family: 'Barlow', sans-serif;
+    font-size: .78rem; font-weight: 600;
+    letter-spacing: .06em; text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer; transition: color .2s, background .2s;
+    white-space: nowrap;
+}
+.ressort-tab:hover { color: white; background: rgba(255,255,255,0.10); }
+.ressort-tab.active {
+    color: var(--red);
+    background: var(--white);
 }
