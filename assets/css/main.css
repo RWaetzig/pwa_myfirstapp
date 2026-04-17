@@ -26,6 +26,7 @@
 /* Navigation, Meta, Labels */
 @font-face {
     font-display: swap;
+    font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     src: url('../fonts/inter-v20-latin-regular.woff2') format('woff2');
@@ -33,15 +34,86 @@
 
 /* Grundeinstellungen */
 :root {
-    --app-color1: rgb(227,0,15); /* rot */
-    --app-color2: rgb(0,0,0); /* schwarz */
-    --app-color3: rgb(211,211,211); /* helles grau */
+    --app-color-red: rgb(227,0,15); /* rot */
+    --app-color-black: rgb(0,0,0); /* schwarz */
+    --app-color-grey: rgb(211,211,211); /* helles grau */
+    --app-color-white: rgb(255,255,255);
 }
 
 /* Basics */
 body {
-    background: var(--app-color3);
-    color: var(--app-color2);
+    background: var(--app-color-grey);
+    color: var(--app-color-black);
     font-family: 'Source Serif 4', serif;
     font-size: 16px;
+    min-height: 100vh;
+    padding-top: 65px;
+    padding-bottom: 110px;
+}
+
+/* Top Header */
+.top-header {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1050;
+    height: 65px;
+    display: flex; align-items: center;
+    padding: 0 20px;
+    background: var(--app-color-red);
+}
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-family: 'Inter';
+}
+.logo-badge {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+.logo-text {
+    color: white;
+    font-size: .92rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+.logo-text span {
+    display: block;
+    font-weight: 300;
+    font-size: .72rem;
+    opacity: .80;
+}
+.header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+    color: white;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s;
+    position: relative;
+}
+.icon-btn:hover {
+    background: rgba(255,255,255,0.38);
 }
