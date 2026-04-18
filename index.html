@@ -28,37 +28,21 @@
             </a>
         </div>
     </div>
-    <!--Ressort Tabs
+    <!--Ressort Tabs-->
     <div class="container-fluid">
         <nav class="ressort-bar" aria-label="Ressorts">
-            <button class="ressort-tab active">Startseite</button>
-            <button class="ressort-tab">Politik</button>
-            <button class="ressort-tab">Wirtschaft</button>
-            <button class="ressort-tab">Kultur</button>
-            <button class="ressort-tab">Wissen</button>
-            <button class="ressort-tab">Sport</button>
-            <button class="ressort-tab">Panorama</button>
-            <button class="ressort-tab">Meinung</button>
-            <button class="ressort-tab">Reise</button>
+            <a href="index.html"><button class="ressort-tab active">Startseite</button></a>
+            <a href="layout1.html"><button class="ressort-tab">Layout Ralf</button></a>
+            <a href="stadtwerke.html"><button class="ressort-tab">Layout Stadtwerke</button></a>
+            <a href="welt.html"><button class="ressort-tab">Layout Welt</button></a>
+            <a href="index.html"><button class="ressort-tab">Kontakt</button></a>
+            <a href="index.html"><button class="ressort-tab">Kontakt</button></a>
         </nav>
-    </div>-->
+    </div>
 </header>
-
-
-
 <main>
-<ul>
-    <li><a href="layout0.html">Layout 1</a></li>
-    <li><a href="layout1.html">Layout 2</a></li>
-    <li><a href="layout2.html">Layout 3</a></li>
-    <li><a href="layout3.html">Layout 4</a></li>
-    <li><a href="stadtwerke.html">Layout 5</a></li>
-    <li><a href="welt.html">Layout 6</a></li>
-</ul>
-
     <!-- Viel Inhalt zum Scrollen -->
     <div class="container-fluid">
-
         <div class="content-block">
             <h2>Abschnitt 1</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel sem at sapien tincidunt luctus Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel sem at sapien tincidunt luctus.</p>
@@ -92,26 +76,21 @@
     </div>
 </main>
 <footer>
-    <!-- ════ BOTTOM NAV ════ -->
-    <nav id="bottom-bar" aria-label="Hauptnavigation">
-        <a href="#" class="nav-btn active" aria-label="Home">
-            <div class="nb-icon"><i class="bi bi-house-fill"></i></div>
-            <span>Home</span>
-        </a>
-        <a href="#" class="nav-btn" aria-label="Verbrauch">
-            <div class="nb-icon"><i class="bi bi-bar-chart-fill"></i></div>
-            <span>Verbrauch</span>
-        </a>
-        <a href="#" class="nav-btn" aria-label="Rechnung">
-            <div class="nb-icon"><i class="bi bi-receipt"></i></div>
-            <span>Rechnung</span>
-        </a>
-        <a href="#" class="nav-btn" aria-label="Profil">
-            <div class="nb-icon"><i class="bi bi-person-fill"></i></div>
-            <span>Profil</span>
-        </a>
-    </nav>
+    <!-- ════ BOTTOM BAR ════ -->
+    <div class="container-fluid bottom-bar" role="navigation" aria-label="Hauptnavigation">
+        <button class="mac-btn active" data-tooltip="Home" aria-label="Home">
+            <i class="bi bi-house-fill"></i>
+        </button>
+        <button class="mac-btn" data-tooltip="Entdecken" aria-label="Entdecken">
+            <i class="bi bi-compass-fill"></i>
+        </button>
+        <button class="mac-btn" data-tooltip="Bibliothek" aria-label="Bibliothek">
+            <i class="bi bi-collection-fill"></i>
+        </button>
+        <button class="mac-btn" data-tooltip="Profil" aria-label="Profil">
+            <i class="bi bi-person-fill"></i>
+        </button>
+    </div>
 </footer>
-
 </body>
 </html>
