@@ -165,7 +165,7 @@ body {
     left: 0;
     right: 0;
     z-index: 1040;
-    height: 50px;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -176,7 +176,6 @@ body {
     border-top: 1px solid rgba(255,255,255,0.18);
     box-shadow: 0 -4px 28px rgba(215,38,56,0.30);
     padding-bottom: env(safe-area-inset-bottom);
-    padding-bottom: 80px;
 }
 /* ── Runde macOS-Buttons ── */
 .mac-btn {
@@ -185,11 +184,11 @@ body {
     justify-content: center;
     width: 56px;
     height: 56px;
+    transform: translateY(-50%);
     border: 2px solid rgba(255,255,255,0.68);
     border-radius: 50%;
     /*background: rgba(255,255,255,0.18);*/
     background: var(--app-color-red);
-
     color: rgba(255,255,255,0.85);
     font-size: 1.5rem;
     cursor: pointer;
@@ -201,8 +200,10 @@ body {
 .mac-btn:hover {
     background: rgba(255,255,255,0.30);
     color: #fff;
-    transform: scale(1.12) translateY(-3px);
+    transform: scale(1.12) translateY(-50%);
     box-shadow: 0 6px 20px rgba(0,0,0,0.18);
 }
 
-.mac-btn:active { transform: scale(0.95); }
+.mac-btn:active {
+    transform: scale(0.95) translateY(-50%);
+}
