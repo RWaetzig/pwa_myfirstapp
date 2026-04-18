@@ -113,7 +113,7 @@ body {
     height: 40px;
     border: none;
     background: rgba(255,255,255,0.25);
-    border-radius: 50%;
+    border-radius: 30%;
     color: white;
     font-size: 1rem;
     display: flex;
@@ -157,8 +157,6 @@ body {
     color: var(--app-color-red);
     background: var(--app-color-white);
 }
-
-
 .bottom-bar {
     position: fixed;
     bottom: 0;
@@ -182,11 +180,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     transform: translateY(-50%);
     border: 2px solid rgba(255,255,255,0.68);
-    border-radius: 50%;
+    border-radius: 30%;
     /*background: rgba(255,255,255,0.18);*/
     background: var(--app-color-red);
     color: rgba(255,255,255,0.85);
