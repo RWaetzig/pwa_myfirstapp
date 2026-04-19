@@ -32,7 +32,6 @@
     <div class="container-fluid">
         <nav class="ressort-bar" aria-label="Ressorts">
             <a href="index.html"><button class="ressort-tab active">Startseite</button></a>
-            <a href="indexv2.html"><button class="ressort-tab">Layout V2</button></a>
             <a href="layout1.html"><button class="ressort-tab">Layout Ralf</button></a>
             <a href="stadtwerke.html"><button class="ressort-tab">Layout Stadtwerke</button></a>
             <a href="welt.html"><button class="ressort-tab">Layout Welt</button></a>
@@ -76,25 +75,30 @@
 
     </div>
 </main>
-<footer class="bottom-bar" role="navigation" aria-label="Hauptnavigation">
-    <a href="index.html" class="mac-btn active" data-tooltip="Start" aria-label="Start">
-        <i class="bi bi-house-fill"></i>
-    </a>
-    <a href="" class="mac-btn" data-tooltip="Entdecken" aria-label="Entdecken">
-        <i class="bi bi-compass-fill"></i>
-    </a>
-    <a href="" class="mac-btn" data-tooltip="Bibliothek" aria-label="Bibliothek">
-        <i class="bi bi-collection-fill"></i>
-    </a>
-    <a href="" class="mac-btn" data-tooltip="Profil" aria-label="Profil">
-        <i class="bi bi-person-fill"></i>
-    </a>
-
-    <input type="file" accept="image/*" capture="environment" id="kamera-input" hidden/>
-    <button class="mac-btn" data-tooltip="Kamera" aria-label="kamera" onclick="document.getElementById('kamera-input').click()">
-        <i class="bi bi-camera"></i>
-    </button>
-
+<footer>
+    <!-- ════ FIXED BOTTOM NAV ════ -->
+    <nav id="bottom-nav" aria-label="Navigation">
+        <a href="#" class="nav-item active">
+            <i class="bi bi-house-fill"></i>
+            <span>Start</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="bi bi-ticket-perforated-fill"></i>
+            <span>Tippen</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="bi bi-trophy-fill"></i>
+            <span>Ergebnisse</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="bi bi-collection-fill"></i>
+            <span>Meine Scheine</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="bi bi-person-fill"></i>
+            <span>Konto</span>
+        </a>
+    </nav>
 </footer>
 <script src="assets/js/bootstrap.bundle.min.js" defer></script>
 <script src="assets/js/main.js" defer></script>

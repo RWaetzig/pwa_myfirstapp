@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>SPD SOE – Mitmachen & Gewinnen</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Lora:wght@600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --red:       #C8102E;
+      --red-dark:  #9b0b22;
+      --red-deep:  #6e0717;
+      --red-light: #fdf1f3;
+      --red-mid:   rgba(200,16,46,0.12);
+      --gold:      #F5C518;
+      --gold-dark: #c9a000;
+      --bg:        #f4f4f6;
+      --card:      #ffffff;
+      --text:      #1a1a1a;
+      --muted:     #666;
+      --border:    #e0e0e8;
+      --radius:    14px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding-top: 65px;
+      padding-bottom: 72px;
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ══════════════════════════════════════
+       FIXED HEADER
+    ══════════════════════════════════════ */
+    #top-header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 65px; z-index: 1060;
+      background: var(--red);
+      box-shadow: 0 3px 20px rgba(0,0,0,0.22);
+      display: flex; align-items: center;
+      padding: 0 16px; gap: 12px;
+    }
+
+    .header-logo {
+      display: flex; align-items: center; gap: 9px;
+      text-decoration: none;
+    }
+    .logo-emblem {
+      width: 38px; height: 38px;
+      background: white; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-emblem svg { width: 26px; height: 26px; }
+    .logo-text {
+      color: white; font-weight: 800; font-size: 1.05rem;
+      letter-spacing: .01em; line-height: 1.1;
+    }
+    .logo-text span { display: block; font-size: .68rem; font-weight: 400; opacity: .80; }
+
+    .header-right { margin-left: auto; display: flex; gap: 6px; }
+    .hdr-btn {
+      width: 36px; height: 36px; border: none;
+      background: rgba(255,255,255,0.18); border-radius: 50%;
+      color: white; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .2s; position: relative;
+    }
+    .hdr-btn:hover { background: rgba(255,255,255,0.30); }
+    .hdr-dot {
+      position: absolute; top: 5px; right: 5px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold); border: 1.5px solid var(--red);
+    }
+
+    /* ══════════════════════════════════════
+       JACKPOT HERO BANNER
+    ══════════════════════════════════════ */
+    .jackpot-hero {
+      background: linear-gradient(160deg, var(--red-deep) 0%, var(--red) 45%, #e8203a 100%);
+      padding: 24px 20px 36px;
+      position: relative; overflow: hidden;
+      text-align: center;
+    }
+    .jackpot-hero::before {
+      content: '';
+      position: absolute; top: -60px; left: -60px;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .jackpot-hero::after {
+      content: '';
+      position: absolute; bottom: -80px; right: -40px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(0,0,0,0.08);
+    }
+
+    .hero-eyebrow {
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(255,255,255,.70); margin-bottom: 6px;
+    }
+    .hero-game-name {
+      font-family: 'Lora', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: white; margin-bottom: 14px;
+    }
+
+    .jackpot-amount-wrap {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 18px; padding: 12px 28px;
+      margin-bottom: 18px; position: relative; z-index: 1;
+    }
+    .jackpot-label {
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: .10em; text-transform: uppercase;
+      color: rgba(255,255,255,.70); margin-bottom: 4px;
+    }
+    .jackpot-amount {
+      font-size: 2.6rem; font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 2px 18px rgba(245,197,24,0.45);
+      line-height: 1;
+      letter-spacing: -.02em;
+    }
+    .jackpot-sub {
+      font-size: .72rem; color: rgba(255,255,255,.65);
+      margin-top: 4px;
+    }
+
+    .hero-countdown {
+      display: flex; justify-content: center; gap: 12px;
+      margin-bottom: 18px; position: relative; z-index: 1;
+    }
+    .cd-block {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px; padding: 7px 12px; text-align: center;
+      min-width: 52px;
+    }
+    .cd-val { font-size: 1.3rem; font-weight: 800; color: white; line-height: 1; }
+    .cd-lbl { font-size: .58rem; font-weight: 600; color: rgba(255,255,255,.60); letter-spacing: .07em; text-transform: uppercase; }
+
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold); color: var(--red-deep);
+      font-size: .95rem; font-weight: 800;
+      padding: 12px 28px; border-radius: 50px;
+      border: none; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(245,197,24,0.45);
+      transition: transform .18s, box-shadow .18s;
+      position: relative; z-index: 1;
+    }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,197,24,0.55); }
+    .hero-cta i { font-size: 1.1rem; }
+
+    /* ══════════════════════════════════════
+       SCHNELL-SPIEL STRIP
+    ══════════════════════════════════════ */
+    .spiel-strip {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex; gap: 10px; overflow-x: auto;
+      scrollbar-width: none; margin-bottom: 8px;
+    }
+    .spiel-strip::-webkit-scrollbar { display: none; }
+
+    .spiel-chip {
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: 7px;
+      border: 1.5px solid var(--border);
+      border-radius: 50px; padding: 7px 14px;
+      font-size: .80rem; font-weight: 600;
+      cursor: pointer; background: white;
+      color: var(--text); transition: all .18s;
+      white-space: nowrap;
+    }
+    .spiel-chip i { font-size: .9rem; color: var(--red); }
+    .spiel-chip:hover, .spiel-chip.active {
+      background: var(--red); color: white; border-color: var(--red);
+    }
+    .spiel-chip:hover i, .spiel-chip.active i { color: white; }
+
+    /* ══════════════════════════════════════
+       TIPPSCHEIN CARD
+    ══════════════════════════════════════ */
+    .tippschein-card {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px; overflow: hidden;
+    }
+
+    .schein-header {
+      background: var(--red);
+      padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .schein-title { color: white; font-size: .92rem; font-weight: 700; }
+    .schein-info { color: rgba(255,255,255,.75); font-size: .75rem; }
+    .schein-rnd {
+      background: rgba(255,255,255,0.20); color: white;
+      font-size: .72rem; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .schein-body { padding: 16px; }
+
+    /* 7×7 Zahlenfeld */
+    .zahlen-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px; margin-bottom: 14px;
+    }
+    .zahl-btn {
+      aspect-ratio: 1;
+      border-radius: 50%; border: 1.5px solid var(--border);
+      background: white; color: var(--text);
+      font-size: .82rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all .15s;
+      font-family: 'Outfit', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .zahl-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
+    .zahl-btn.gewaehlt {
+      background: var(--red); color: white;
+      border-color: var(--red);
+      box-shadow: 0 2px 8px rgba(200,16,46,0.35);
+      transform: scale(1.08);
+    }
+
+    .schein-actions {
+      display: flex; gap: 10px;
+    }
+    .btn-quick {
+      flex: 1; height: 42px; border-radius: 10px;
+      border: 1.5px solid var(--red); background: transparent;
+      color: var(--red); font-size: .82rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      cursor: pointer; transition: all .18s; font-family: 'Outfit', sans-serif;
+    }
+    .btn-quick:hover { background: var(--red-light); }
+
+    .btn-submit {
+      flex: 2; height: 42px; border-radius: 10px;
+      border: none; background: var(--red);
+      color: white; font-size: .88rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      cursor: pointer; transition: all .18s; font-family: 'Outfit', sans-serif;
+      box-shadow: 0 3px 14px rgba(200,16,46,0.35);
+    }
+    .btn-submit:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+    /* Gewählte Zahlen Anzeige */
+    .selected-display {
+      min-height: 36px; margin-bottom: 14px;
+      background: var(--bg); border-radius: 8px;
+      padding: 6px 10px;
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    }
+    .sel-lbl { font-size: .72rem; color: var(--muted); font-weight: 500; }
+    .sel-ball {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--red); color: white;
+      font-size: .72rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 1px 4px rgba(200,16,46,0.30);
+    }
+    .sel-empty {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1.5px dashed var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .6rem; color: var(--border);
+    }
+
+    /* ══════════════════════════════════════
+       SECTION HEADER
+    ══════════════════════════════════════ */
+    .sec-head {
+      padding: 14px 16px 8px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sec-head .title {
+      font-size: .78rem; font-weight: 800;
+      letter-spacing: .10em; text-transform: uppercase;
+      color: var(--red); display: flex; align-items: center; gap: 6px;
+    }
+    .sec-head .more {
+      font-size: .78rem; color: var(--red); font-weight: 600;
+    }
+
+    /* ══════════════════════════════════════
+       LETZTE ZIEHUNG
+    ══════════════════════════════════════ */
+    .ziehung-card {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px; padding: 0 16px 16px;
+    }
+    .ziehung-date {
+      font-size: .72rem; color: var(--muted);
+      padding: 10px 0 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .lotto-balls {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      align-items: center; margin-bottom: 8px;
+    }
+    .ball {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; font-weight: 800; color: white;
+      box-shadow: inset 0 -3px 6px rgba(0,0,0,0.20), 0 2px 8px rgba(0,0,0,0.15);
+      position: relative;
+    }
+    .ball::before {
+      content: '';
+      position: absolute; top: 6px; left: 9px;
+      width: 10px; height: 6px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 50%; transform: rotate(-30deg);
+    }
+    .ball-red    { background: radial-gradient(circle at 35% 35%, #e8334a, var(--red-deep)); }
+    .ball-grey   { background: radial-gradient(circle at 35% 35%, #888, #333); }
+    .ball-gold   { background: radial-gradient(circle at 35% 35%, #ffe066, var(--gold-dark)); color: var(--red-deep); }
+    .ball-zusatz {
+      width: 32px; height: 32px; font-size: .78rem;
+      background: radial-gradient(circle at 35% 35%, #888, #444);
+    }
+
+    .ball-separator {
+      font-size: 1.2rem; color: var(--muted); font-weight: 300;
+    }
+    .ball-label {
+      font-size: .65rem; font-weight: 700; color: var(--muted);
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════════════
+       MEINE SCHEINE
+    ══════════════════════════════════════ */
+    .schein-liste {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .schein-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background .15s;
+    }
+    .schein-row:last-child { border-bottom: none; }
+    .schein-row:hover { background: var(--red-light); }
+
+    .schein-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: var(--red-mid); color: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem; flex-shrink: 0;
+    }
+    .schein-info-block .name { font-size: .88rem; font-weight: 700; }
+    .schein-info-block .meta { font-size: .74rem; color: var(--muted); }
+    .schein-status {
+      margin-left: auto; flex-shrink: 0;
+      font-size: .72rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .status-aktiv   { background: var(--red-mid); color: var(--red); }
+    .status-gewinn  { background: #fef3c7; color: #92400e; }
+    .status-abgelaufen { background: #f3f4f6; color: var(--muted); }
+
+    /* ══════════════════════════════════════
+       AKTIONEN GRID
+    ══════════════════════════════════════ */
+    .aktionen-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; padding: 0 16px; margin-bottom: 8px;
+    }
+    .aktion-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px; cursor: pointer;
+      transition: all .18s; text-decoration: none;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .aktion-card:hover { border-color: var(--red); background: var(--red-light); }
+    .aktion-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--red-mid); color: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+    }
+    .aktion-label { font-size: .85rem; font-weight: 700; color: var(--text); }
+    .aktion-sub   { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+
+    /* ══════════════════════════════════════
+       FIXED BOTTOM NAV
+    ══════════════════════════════════════ */
+    #bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 64px; z-index: 1060;
+      background: var(--red);
+      border-top: 2px solid var(--red-dark);
+      box-shadow: 0 -3px 20px rgba(0,0,0,0.18);
+      display: flex; align-items: stretch;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 3px;
+      background: none; border: none;
+      color: rgba(255,255,255,0.55);
+      font-size: .58rem; font-weight: 700;
+      letter-spacing: .04em; text-transform: uppercase;
+      cursor: pointer; text-decoration: none;
+      transition: color .18s, background .18s;
+      position: relative;
+    }
+    .nav-item i { font-size: 1.2rem; transition: transform .18s; }
+    .nav-item:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,0.07); }
+    .nav-item:hover i { transform: translateY(-2px); }
+    .nav-item.active { color: white; background: rgba(255,255,255,0.10); }
+    .nav-item.active::after {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 28px; height: 2.5px;
+      background: var(--gold); border-radius: 0 0 4px 4px;
+    }
+
+    .nav-badge {
+      position: absolute; top: 6px; left: calc(50% + 6px);
+      background: var(--gold); color: var(--red-deep);
+      font-size: .55rem; font-weight: 900;
+      min-width: 16px; height: 16px; border-radius: 8px; padding: 0 4px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid var(--red);
+    }
+
+    /* ══════════════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fu  { animation: fadeUp .38s ease both; }
+    .d1 { animation-delay: .06s; } .d2 { animation-delay: .12s; }
+    .d3 { animation-delay: .18s; } .d4 { animation-delay: .24s; }
+
+    @keyframes pulse-gold {
+      0%, 100% { box-shadow: 0 4px 20px rgba(245,197,24,0.45); }
+      50%       { box-shadow: 0 4px 30px rgba(245,197,24,0.75); }
+    }
+    .hero-cta { animation: pulse-gold 2.5s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+
+  <!-- ════ FIXED HEADER ════ -->
+  <header id="top-header">
+    <a href="#" class="header-logo">
+      <div class="logo-emblem">
+        <!-- SPD Rose SVG -->
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" fill="#C8102E"/>
+          <text x="20" y="26" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="900" font-size="13" fill="white">SPD</text>
+        </svg>
+      </div>
+      <div class="logo-text">
+        SPD SOE
+        <span>Mitmachen &amp; Gewinnen</span>
+      </div>
+    </a>
+    <div class="header-right">
+      <button class="hdr-btn" aria-label="Benachrichtigungen">
+        <i class="bi bi-bell"></i>
+        <span class="hdr-dot"></span>
+      </button>
+      <button class="hdr-btn" aria-label="Konto">
+        <i class="bi bi-person"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ════ MAIN CONTENT ════ -->
+  <main>
+
+    <!-- Jackpot Hero -->
+    <div class="jackpot-hero fu">
+      <div class="hero-eyebrow">Nächste Ziehung · Samstag</div>
+      <div class="hero-game-name">SPD Sonderauslosung SOE 2026</div>
+
+      <div class="jackpot-amount-wrap">
+        <div class="jackpot-label">Hauptgewinn</div>
+        <div class="jackpot-amount">25.000 €</div>
+        <div class="jackpot-sub">+ 10 × 500 € Sofortgewinne</div>
+      </div>
+
+      <div class="hero-countdown">
+        <div class="cd-block">
+          <div class="cd-val" id="cd-d">03</div>
+          <div class="cd-lbl">Tage</div>
+        </div>
+        <div class="cd-block">
+          <div class="cd-val" id="cd-h">14</div>
+          <div class="cd-lbl">Std</div>
+        </div>
+        <div class="cd-block">
+          <div class="cd-val" id="cd-m">27</div>
+          <div class="cd-lbl">Min</div>
+        </div>
+        <div class="cd-block">
+          <div class="cd-val" id="cd-s">09</div>
+          <div class="cd-lbl">Sek</div>
+        </div>
+      </div>
+
+      <button class="hero-cta">
+        <i class="bi bi-ticket-perforated-fill"></i>
+        Jetzt mitspielen
+      </button>
+    </div>
+
+    <!-- Spiel-Auswahl Strip -->
+    <div class="spiel-strip fu d1">
+      <button class="spiel-chip active"><i class="bi bi-star-fill"></i> SOE Hauptlos</button>
+      <button class="spiel-chip"><i class="bi bi-grid-3x3"></i> 6 aus 49</button>
+      <button class="spiel-chip"><i class="bi bi-globe2"></i> EuroJackpot</button>
+      <button class="spiel-chip"><i class="bi bi-lightning-fill"></i> KENO</button>
+      <button class="spiel-chip"><i class="bi bi-dice-5-fill"></i> Glücksspirale</button>
+    </div>
+
+    <!-- Tippschein -->
+    <div class="tippschein-card fu d1">
+      <div class="schein-header">
+        <div>
+          <div class="schein-title">Mein Tippschein – 6 aus 49</div>
+          <div class="schein-info">Wähle 6 Zahlen von 1–49</div>
+        </div>
+        <span class="schein-rnd">Reihe A</span>
+      </div>
+
+      <div class="schein-body">
+
+        <!-- Gewählte Zahlen Vorschau -->
+        <div class="selected-display" id="selected-display">
+          <span class="sel-lbl">Deine Zahlen:</span>
+        </div>
+
+        <!-- 7×7 Zahlenfeld -->
+        <div class="zahlen-grid" id="zahlen-grid">
+          <!-- Zahlen 1–49 werden per JS erzeugt -->
+        </div>
+
+        <div class="schein-actions">
+          <button class="btn-quick" id="quick-tipp-btn">
+            <i class="bi bi-shuffle"></i> Quicktipp
+          </button>
+          <button class="btn-submit">
+            <i class="bi bi-check-circle-fill"></i> Schein einreichen
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Letzte Ziehung -->
+    <div class="sec-head fu d2">
+      <span class="title"><i class="bi bi-trophy-fill"></i> Letzte Ziehung</span>
+      <a href="#" class="more">Alle Quoten →</a>
+    </div>
+
+    <div class="ziehung-card fu d2">
+      <div class="ziehung-date">
+        <i class="bi bi-calendar3"></i>
+        Samstag, 12. April 2026 · 6 aus 49
+      </div>
+      <div class="lotto-balls">
+        <div class="ball ball-red">4</div>
+        <div class="ball ball-red">13</div>
+        <div class="ball ball-red">22</div>
+        <div class="ball ball-red">31</div>
+        <div class="ball ball-red">37</div>
+        <div class="ball ball-red">45</div>
+        <div class="ball-separator">|</div>
+        <div>
+          <div class="ball ball-gold ball-zusatz">7</div>
+          <div class="ball-label">Zusatz</div>
+        </div>
+      </div>
+      <div style="font-size:.74rem;color:var(--muted);margin-top:4px;">
+        <i class="bi bi-info-circle me-1"></i>
+        Jackpot nicht geknackt · nächste Woche <strong style="color:var(--red)">25.000 €</strong>
+      </div>
+    </div>
+
+    <!-- Aktionen -->
+    <div class="sec-head fu d3">
+      <span class="title"><i class="bi bi-grid-fill"></i> Services</span>
+    </div>
+
+    <div class="aktionen-grid fu d3">
+      <a href="#" class="aktion-card">
+        <div class="aktion-icon"><i class="bi bi-qr-code-scan"></i></div>
+        <div>
+          <div class="aktion-label">Los scannen</div>
+          <div class="aktion-sub">QR-Code einlesen</div>
+        </div>
+      </a>
+      <a href="#" class="aktion-card">
+        <div class="aktion-icon"><i class="bi bi-clock-history"></i></div>
+        <div>
+          <div class="aktion-label">Ziehungen</div>
+          <div class="aktion-sub">Ergebnisse & Quoten</div>
+        </div>
+      </a>
+      <a href="#" class="aktion-card">
+        <div class="aktion-icon"><i class="bi bi-people-fill"></i></div>
+        <div>
+          <div class="aktion-label">Spielgemeinschaft</div>
+          <div class="aktion-sub">Gemeinsam gewinnen</div>
+        </div>
+      </a>
+      <a href="#" class="aktion-card">
+        <div class="aktion-icon"><i class="bi bi-gift-fill"></i></div>
+        <div>
+          <div class="aktion-label">Aktionen</div>
+          <div class="aktion-sub">Bonuslose & Rabatte</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Meine Scheine -->
+    <div class="sec-head fu d4">
+      <span class="title"><i class="bi bi-collection-fill"></i> Meine Scheine</span>
+      <a href="#" class="more">Alle →</a>
+    </div>
+
+    <div class="schein-liste fu d4">
+      <div class="schein-row">
+        <div class="schein-icon"><i class="bi bi-ticket-perforated-fill"></i></div>
+        <div class="schein-info-block">
+          <div class="name">SOE Hauptlos 2026</div>
+          <div class="meta">Los-Nr. 4872 · Ziehung 21.04.26</div>
+        </div>
+        <span class="schein-status status-aktiv">Aktiv</span>
+      </div>
+      <div class="schein-row">
+        <div class="schein-icon"><i class="bi bi-grid-3x3"></i></div>
+        <div class="schein-info-block">
+          <div class="name">6 aus 49 – Dauerauftrag</div>
+          <div class="meta">4 Zahlenreihen · Mo &amp; Sa</div>
+        </div>
+        <span class="schein-status status-aktiv">Aktiv</span>
+      </div>
+      <div class="schein-row">
+        <div class="schein-icon"><i class="bi bi-globe2"></i></div>
+        <div class="schein-info-block">
+          <div class="name">EuroJackpot</div>
+          <div class="meta">Ziehung 12.04.26 · 2 Reihen</div>
+        </div>
+        <span class="schein-status status-gewinn">🎉 Gewinn!</span>
+      </div>
+      <div class="schein-row">
+        <div class="schein-icon"><i class="bi bi-ticket-fill"></i></div>
+        <div class="schein-info-block">
+          <div class="name">Glücksspirale</div>
+          <div class="meta">Ziehung 05.04.26 · abgelaufen</div>
+        </div>
+        <span class="schein-status status-abgelaufen">Abgelaufen</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ════ FIXED BOTTOM NAV ════ -->
+  <nav id="bottom-nav" aria-label="Navigation">
+    <a href="#" class="nav-item active">
+      <i class="bi bi-house-fill"></i>
+      <span>Start</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="bi bi-ticket-perforated-fill"></i>
+      <span>Tippen</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="bi bi-trophy-fill"></i>
+      <span>Ergebnisse</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="bi bi-collection-fill"></i>
+      <span>Meine Scheine</span>
+      <span class="nav-badge">1</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="bi bi-person-fill"></i>
+      <span>Konto</span>
+    </a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* ── Zahlenfeld generieren ── */
+    const grid = document.getElementById('zahlen-grid');
+    const display = document.getElementById('selected-display');
+    let selected = new Set();
+    const MAX = 6;
+
+    for (let i = 1; i <= 49; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'zahl-btn';
+      btn.textContent = i;
+      btn.dataset.zahl = i;
+      btn.addEventListener('click', () => toggleZahl(i, btn));
+      grid.appendChild(btn);
+    }
+
+    function toggleZahl(n, btn) {
+      if (selected.has(n)) {
+        selected.delete(n);
+        btn.classList.remove('gewaehlt');
+      } else {
+        if (selected.size >= MAX) return;
+        selected.add(n);
+        btn.classList.add('gewaehlt');
+      }
+      renderDisplay();
+    }
+
+    function renderDisplay() {
+      display.innerHTML = '<span class="sel-lbl">Deine Zahlen:</span>';
+      const sorted = [...selected].sort((a, b) => a - b);
+      sorted.forEach(n => {
+        const ball = document.createElement('div');
+        ball.className = 'sel-ball';
+        ball.textContent = n;
+        display.appendChild(ball);
+      });
+      for (let i = sorted.length; i < MAX; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'sel-empty';
+        empty.textContent = '?';
+        display.appendChild(empty);
+      }
+    }
+
+    /* ── Quicktipp ── */
+    document.getElementById('quick-tipp-btn').addEventListener('click', () => {
+      // Reset
+      selected.clear();
+      document.querySelectorAll('.zahl-btn').forEach(b => b.classList.remove('gewaehlt'));
+      // Zufällig 6 aus 49
+      const pool = Array.from({length: 49}, (_, i) => i + 1);
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      pool.slice(0, 6).forEach(n => {
+        selected.add(n);
+        document.querySelector(`.zahl-btn[data-zahl="${n}"]`).classList.add('gewaehlt');
+      });
+      renderDisplay();
+    });
+
+    /* ── Spiel-Chips ── */
+    document.querySelectorAll('.spiel-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.spiel-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      });
+    });
+
+    /* ── Bottom Nav ── */
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    /* ── Countdown ── */
+    function updateCountdown() {
+      const now = new Date();
+      const next = new Date(now);
+      next.setDate(next.getDate() + ((6 - now.getDay() + 7) % 7 || 7));
+      next.setHours(19, 25, 0, 0);
+      const diff = Math.max(0, next - now);
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('cd-d').textContent = String(d).padStart(2, '0');
+      document.getElementById('cd-h').textContent = String(h).padStart(2, '0');
+      document.getElementById('cd-m').textContent = String(m).padStart(2, '0');
+      document.getElementById('cd-s').textContent = String(s).padStart(2, '0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    renderDisplay();
+  </script>
+</body>
+</html>

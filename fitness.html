@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>SPD SOE – Mitmachen</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --bg:        #000000;
+      --bg-2:      #0d0d0d;
+      --bg-3:      #1c1c1e;
+      --bg-4:      #2c2c2e;
+      --bg-5:      #3a3a3c;
+      --red:       #FF2D55;
+      --red-dark:  #C8102E;
+      --red-glow:  rgba(255,45,85,0.35);
+      --gold:      #FFD60A;
+      --teal:      #5AC8FA;
+      --green:     #30D158;
+      --orange:    #FF9F0A;
+      --text:      #ffffff;
+      --text-2:    rgba(255,255,255,0.70);
+      --text-3:    rgba(255,255,255,0.40);
+      --border:    rgba(255,255,255,0.10);
+      --radius:    16px;
+      --radius-lg: 22px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding-top: 65px;
+      padding-bottom: 80px;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ══════════════════════════════════════
+       FIXED HEADER – Apple-Fitness-Stil
+       Groß, dunkel, Vorname prominent
+    ══════════════════════════════════════ */
+    #top-header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 65px; z-index: 1060;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 20px; gap: 12px;
+    }
+
+    .hdr-logo-wrap {
+      display: flex; align-items: center; gap: 10px; flex: 1;
+    }
+    .hdr-spd-badge {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: var(--red-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .72rem; font-weight: 900; color: white;
+      letter-spacing: -.02em; flex-shrink: 0;
+    }
+    .hdr-title {
+      font-size: .92rem; font-weight: 700; color: var(--text);
+      line-height: 1.1;
+    }
+    .hdr-subtitle { font-size: .65rem; color: var(--text-3); font-weight: 400; }
+
+    .hdr-btn {
+      width: 34px; height: 34px; border: none;
+      background: var(--bg-3); border-radius: 50%;
+      color: var(--text-2); font-size: .95rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .2s; flex-shrink: 0;
+      position: relative;
+    }
+    .hdr-btn:hover { background: var(--bg-4); }
+    .hdr-dot {
+      position: absolute; top: 5px; right: 5px;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--red); border: 1.5px solid var(--bg);
+    }
+
+    /* ══════════════════════════════════════
+       GREETING + DATE
+    ══════════════════════════════════════ */
+    .greeting-section {
+      padding: 24px 20px 8px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .greeting-day {
+      font-size: .78rem; font-weight: 600;
+      letter-spacing: .10em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 4px;
+    }
+    .greeting-name {
+      font-size: 1.8rem; font-weight: 800;
+      color: var(--text); line-height: 1;
+      letter-spacing: -.02em;
+    }
+    .greeting-sub { font-size: .82rem; color: var(--text-3); margin-top: 4px; }
+
+    .greeting-avatar {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--red-dark), var(--red));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 800; color: white;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════
+       ACTIVITY RINGS — Apple Fitness Signatur
+       Hier: Gewinnringe für SOE
+    ══════════════════════════════════════ */
+    .rings-card {
+      margin: 12px 20px;
+      background: var(--bg-3);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 20px;
+      display: flex; align-items: center; gap: 20px;
+      position: relative; overflow: hidden;
+    }
+    .rings-card::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 160px; height: 160px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,45,85,0.12) 0%, transparent 70%);
+    }
+
+    /* SVG Ring Container */
+    .ring-svg-wrap {
+      flex-shrink: 0; position: relative;
+      width: 110px; height: 110px;
+    }
+    .ring-svg-wrap svg { width: 110px; height: 110px; transform: rotate(-90deg); }
+
+    .ring-center-text {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      text-align: center;
+    }
+    .ring-center-val {
+      font-size: 1.5rem; font-weight: 900;
+      color: var(--text); line-height: 1;
+      letter-spacing: -.03em;
+    }
+    .ring-center-lbl {
+      font-size: .58rem; font-weight: 600;
+      color: var(--text-3); text-transform: uppercase; letter-spacing: .06em;
+    }
+
+    .rings-legend { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .ring-legend-row { display: flex; align-items: center; gap: 10px; }
+    .ring-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .ring-legend-info {}
+    .ring-legend-name { font-size: .78rem; font-weight: 600; color: var(--text-2); }
+    .ring-legend-val  { font-size: .72rem; color: var(--text-3); }
+
+    /* ══════════════════════════════════════
+       SECTION HEADER — Fitness-Stil (groß, links)
+    ══════════════════════════════════════ */
+    .sec-title {
+      font-size: 1.2rem; font-weight: 800;
+      color: var(--text); padding: 20px 20px 10px;
+      letter-spacing: -.01em;
+    }
+    .sec-title-row {
+      display: flex; align-items: baseline;
+      justify-content: space-between;
+      padding: 20px 20px 10px;
+    }
+    .sec-title-row .t { font-size: 1.2rem; font-weight: 800; color: var(--text); letter-spacing: -.01em; }
+    .sec-title-row .m { font-size: .82rem; font-weight: 600; color: var(--red); }
+
+    /* ══════════════════════════════════════
+       JACKPOT CARD (wie "Zusammenfassung" in Fitness)
+    ══════════════════════════════════════ */
+    .jackpot-card {
+      margin: 0 20px 12px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, #1a0008 0%, #2d0012 40%, #1c1c1e 100%);
+      border: 1px solid rgba(255,45,85,0.25);
+      padding: 22px 20px;
+      position: relative; overflow: hidden;
+    }
+    .jackpot-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(255,45,85,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .jc-eyebrow {
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 8px;
+    }
+    .jc-game { font-size: 1rem; font-weight: 700; color: var(--text-2); margin-bottom: 14px; }
+    .jc-amount {
+      font-size: 3rem; font-weight: 900;
+      color: var(--text); letter-spacing: -.04em; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .jc-amount span { color: var(--red); }
+    .jc-sub { font-size: .80rem; color: var(--text-3); margin-bottom: 18px; }
+
+    /* Countdown Zeile */
+    .jc-countdown {
+      display: flex; gap: 8px; margin-bottom: 18px;
+    }
+    .jc-cd {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 10px;
+      text-align: center; min-width: 50px;
+    }
+    .jc-cd-val { font-size: 1.3rem; font-weight: 800; color: var(--text); line-height: 1; }
+    .jc-cd-lbl { font-size: .56rem; font-weight: 600; color: var(--text-3); letter-spacing: .08em; text-transform: uppercase; }
+
+    .jc-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--red); color: white;
+      font-size: .90rem; font-weight: 800;
+      padding: 13px 24px; border-radius: 50px; border: none;
+      cursor: pointer; font-family: 'Outfit', sans-serif;
+      box-shadow: 0 4px 22px var(--red-glow);
+      transition: all .2s;
+    }
+    .jc-btn:hover { transform: scale(1.03); box-shadow: 0 6px 30px var(--red-glow); }
+
+    /* ══════════════════════════════════════
+       TIPPSCHEIN — Dark Card Style
+    ══════════════════════════════════════ */
+    .tipp-card {
+      margin: 0 20px 12px;
+      background: var(--bg-3);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .tipp-card-head {
+      padding: 16px 18px 12px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .tipp-card-head .title { font-size: .95rem; font-weight: 700; color: var(--text); }
+    .tipp-card-head .sub   { font-size: .72rem; color: var(--text-3); margin-top: 2px; }
+    .tipp-rnd {
+      background: rgba(255,45,85,0.18); color: var(--red);
+      font-size: .70rem; font-weight: 700;
+      padding: 4px 10px; border-radius: 20px;
+      border: 1px solid rgba(255,45,85,0.30);
+    }
+
+    .tipp-body { padding: 16px 18px; }
+
+    /* Gewählte Zahlen */
+    .sel-row {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      margin-bottom: 14px; min-height: 36px;
+      align-items: center;
+    }
+    .sel-ball-dark {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--red); color: white;
+      font-size: .75rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 10px rgba(255,45,85,0.40);
+    }
+    .sel-empty-dark {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1.5px dashed var(--bg-5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .6rem; color: var(--text-3);
+    }
+
+    /* 7×7 Grid dunkel */
+    .zahlen-grid-dark {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      gap: 6px; margin-bottom: 16px;
+    }
+    .zahl-dark {
+      aspect-ratio: 1; border-radius: 50%;
+      border: 1px solid var(--bg-5);
+      background: var(--bg-4); color: var(--text-2);
+      font-size: .80rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all .15s;
+      font-family: 'Outfit', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .zahl-dark:hover { border-color: var(--red); color: var(--red); background: rgba(255,45,85,0.12); }
+    .zahl-dark.gewaehlt {
+      background: var(--red); color: white;
+      border-color: var(--red);
+      box-shadow: 0 0 12px rgba(255,45,85,0.50);
+      transform: scale(1.10);
+    }
+
+    .tipp-btns { display: flex; gap: 10px; }
+    .tipp-btn-ghost {
+      flex: 1; height: 44px; border-radius: 12px;
+      border: 1px solid var(--bg-5); background: var(--bg-4);
+      color: var(--text-2); font-size: .82rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      cursor: pointer; font-family: 'Outfit', sans-serif; transition: all .18s;
+    }
+    .tipp-btn-ghost:hover { border-color: var(--red); color: var(--red); background: rgba(255,45,85,0.08); }
+    .tipp-btn-primary {
+      flex: 2; height: 44px; border-radius: 12px;
+      border: none; background: var(--red);
+      color: white; font-size: .88rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      cursor: pointer; font-family: 'Outfit', sans-serif;
+      box-shadow: 0 3px 16px rgba(255,45,85,0.40); transition: all .18s;
+    }
+    .tipp-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 5px 22px rgba(255,45,85,0.55); }
+
+    /* ══════════════════════════════════════
+       LETZTE ZIEHUNG — Dunkle Karte
+    ══════════════════════════════════════ */
+    .ziehung-card-dark {
+      margin: 0 20px 12px;
+      background: var(--bg-3);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 18px;
+    }
+    .zd-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .zd-head .title { font-size: .90rem; font-weight: 700; color: var(--text); }
+    .zd-head .date  { font-size: .72rem; color: var(--text-3); }
+
+    .lotto-balls-dark {
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    }
+    .ball-dark {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; font-weight: 800; color: white;
+      position: relative;
+    }
+    .ball-dark::before {
+      content: '';
+      position: absolute; top: 7px; left: 10px;
+      width: 9px; height: 5px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 50%; transform: rotate(-30deg);
+    }
+    .bd-red  { background: radial-gradient(circle at 35% 35%, #ff4d6d, var(--red-dark)); box-shadow: 0 2px 10px rgba(255,45,85,0.40); }
+    .bd-gold { background: radial-gradient(circle at 35% 35%, #ffe55c, #c9a000); color: #3a2a00; }
+    .bd-sep  { color: var(--text-3); font-size: 1.1rem; }
+    .bd-zusatz {
+      width: 34px; height: 34px; font-size: .78rem;
+      background: radial-gradient(circle at 35% 35%, #666, #222);
+      border: 1px solid var(--bg-5);
+    }
+
+    /* ══════════════════════════════════════
+       HORIZONTAL SCROLL CARDS (wie Fitness-Workouts)
+    ══════════════════════════════════════ */
+    .h-scroll {
+      display: flex; gap: 12px;
+      padding: 0 20px 4px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .h-scroll::-webkit-scrollbar { display: none; }
+
+    .spiel-card {
+      flex-shrink: 0; width: 155px;
+      background: var(--bg-3);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden; cursor: pointer;
+      transition: transform .18s;
+    }
+    .spiel-card:hover { transform: scale(1.03); }
+
+    .sc-banner {
+      height: 80px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; position: relative; overflow: hidden;
+    }
+    .sc-banner::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.45) 100%);
+    }
+    .sc-body { padding: 10px 12px 12px; }
+    .sc-name { font-size: .82rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .sc-jackpot { font-size: .72rem; font-weight: 700; color: var(--red); }
+    .sc-next { font-size: .65rem; color: var(--text-3); margin-top: 2px; }
+
+    /* ══════════════════════════════════════
+       MEINE SCHEINE — Liste (Fitness-Aktivitäten-Stil)
+    ══════════════════════════════════════ */
+    .schein-dark-list { margin: 0 20px 12px; display: flex; flex-direction: column; gap: 2px; }
+
+    .schein-dark-row {
+      background: var(--bg-3);
+      border-radius: 0; border: none;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px; cursor: pointer; transition: background .15s;
+    }
+    .schein-dark-row:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .schein-dark-row:last-child  { border-radius: 0 0 var(--radius) var(--radius); border-bottom: none; }
+    .schein-dark-row:hover { background: var(--bg-4); }
+
+    .sdr-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0; color: white;
+    }
+    .sdr-text { flex: 1; }
+    .sdr-name { font-size: .88rem; font-weight: 700; color: var(--text); }
+    .sdr-meta { font-size: .72rem; color: var(--text-3); margin-top: 2px; }
+    .sdr-status {
+      font-size: .70rem; font-weight: 700;
+      padding: 3px 9px; border-radius: 20px;
+      flex-shrink: 0;
+    }
+    .s-aktiv   { background: rgba(255,45,85,0.18); color: var(--red); }
+    .s-gewinn  { background: rgba(255,214,10,0.15); color: var(--gold); }
+    .s-done    { background: rgba(255,255,255,0.07); color: var(--text-3); }
+
+    .sdr-chevron { color: var(--text-3); font-size: .8rem; }
+
+    /* ══════════════════════════════════════
+       STATS ROW (wie Fitness Zusammenfassung)
+    ══════════════════════════════════════ */
+    .stats-row {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px; margin: 0 20px 12px;
+    }
+    .stat-card-dark {
+      background: var(--bg-3);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 14px 12px;
+      text-align: center;
+    }
+    .stat-icon { font-size: 1.2rem; margin-bottom: 6px; display: block; }
+    .stat-val-big { font-size: 1.4rem; font-weight: 900; color: var(--text); line-height: 1; letter-spacing: -.03em; }
+    .stat-lbl-small { font-size: .60rem; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+
+    /* ══════════════════════════════════════
+       FIXED BOTTOM TAB BAR — Apple Style
+    ══════════════════════════════════════ */
+    #bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 72px; z-index: 1060;
+      background: rgba(18,18,18,0.92);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 8px;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .nav-tab {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 4px;
+      background: none; border: none;
+      color: var(--text-3);
+      font-size: .60rem; font-weight: 600;
+      letter-spacing: .02em;
+      cursor: pointer; text-decoration: none;
+      transition: color .18s; padding: 8px 4px;
+      position: relative;
+    }
+    .nav-tab i { font-size: 1.3rem; transition: transform .18s; }
+    .nav-tab:hover { color: var(--text-2); }
+    .nav-tab:hover i { transform: translateY(-2px); }
+    .nav-tab.active { color: var(--red); }
+
+    .nav-badge-dark {
+      position: absolute; top: 5px; left: calc(50% + 6px);
+      background: var(--red); color: white;
+      font-size: .52rem; font-weight: 900;
+      min-width: 15px; height: 15px; border-radius: 8px; padding: 0 4px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid var(--bg);
+    }
+
+    /* ══════════════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fu  { animation: fadeUp .4s ease both; }
+    .d1 { animation-delay: .07s; } .d2 { animation-delay: .14s; }
+    .d3 { animation-delay: .21s; } .d4 { animation-delay: .28s; }
+    .d5 { animation-delay: .35s; }
+
+    /* Ring animation */
+    .ring-arc {
+      transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════ FIXED HEADER ════ -->
+  <header id="top-header">
+    <div class="hdr-logo-wrap">
+      <div class="hdr-spd-badge">SPD</div>
+      <div>
+        <div class="hdr-title">SPD SOE</div>
+        <div class="hdr-subtitle">Mitmachen &amp; Gewinnen</div>
+      </div>
+    </div>
+    <button class="hdr-btn" aria-label="Benachrichtigungen">
+      <i class="bi bi-bell"></i>
+      <span class="hdr-dot"></span>
+    </button>
+    <button class="hdr-btn" aria-label="Profil">
+      <i class="bi bi-person"></i>
+    </button>
+  </header>
+
+  <!-- ════ MAIN ════ -->
+  <main>
+
+    <!-- Greeting -->
+    <div class="greeting-section fu">
+      <div>
+        <div class="greeting-day" id="greeting-day">Samstag, 18. April</div>
+        <div class="greeting-name">Hallo, Max 👋</div>
+        <div class="greeting-sub">Nächste Ziehung in 3 Tagen</div>
+      </div>
+      <div class="greeting-avatar">MK</div>
+    </div>
+
+    <!-- Activity Rings → Gewinnringe -->
+    <div class="rings-card fu d1">
+      <!-- SVG Ringe -->
+      <div class="ring-svg-wrap">
+        <svg viewBox="0 0 110 110">
+          <!-- Ring 3: Teilnahmen (äußerster) -->
+          <circle cx="55" cy="55" r="48" fill="none" stroke="rgba(255,45,85,0.18)" stroke-width="9"/>
+          <circle class="ring-arc" id="ring3" cx="55" cy="55" r="48" fill="none"
+            stroke="#FF2D55" stroke-width="9" stroke-linecap="round"
+            stroke-dasharray="301.6" stroke-dashoffset="90"/>
+          <!-- Ring 2: Gewinne (mittlerer) -->
+          <circle cx="55" cy="55" r="36" fill="none" stroke="rgba(255,214,10,0.18)" stroke-width="9"/>
+          <circle class="ring-arc" id="ring2" cx="55" cy="55" r="36" fill="none"
+            stroke="#FFD60A" stroke-width="9" stroke-linecap="round"
+            stroke-dasharray="226.2" stroke-dashoffset="158"/>
+          <!-- Ring 1: Scheine aktiv (innerster) -->
+          <circle cx="55" cy="55" r="24" fill="none" stroke="rgba(90,200,250,0.18)" stroke-width="9"/>
+          <circle class="ring-arc" id="ring1" cx="55" cy="55" r="24" fill="none"
+            stroke="#5AC8FA" stroke-width="9" stroke-linecap="round"
+            stroke-dasharray="150.8" stroke-dashoffset="45"/>
+        </svg>
+        <div class="ring-center-text">
+          <div class="ring-center-val">4</div>
+          <div class="ring-center-lbl">Scheine</div>
+        </div>
+      </div>
+
+      <!-- Legende -->
+      <div class="rings-legend">
+        <div class="ring-legend-row">
+          <div class="ring-dot" style="background:var(--red);"></div>
+          <div class="ring-legend-info">
+            <div class="ring-legend-name">Teilnahmen</div>
+            <div class="ring-legend-val">12 / 15 Lose</div>
+          </div>
+        </div>
+        <div class="ring-legend-row">
+          <div class="ring-dot" style="background:var(--gold);"></div>
+          <div class="ring-legend-info">
+            <div class="ring-legend-name">Gewinne</div>
+            <div class="ring-legend-val">3 × gewonnen</div>
+          </div>
+        </div>
+        <div class="ring-legend-row">
+          <div class="ring-dot" style="background:var(--teal);"></div>
+          <div class="ring-legend-info">
+            <div class="ring-legend-name">Aktive Scheine</div>
+            <div class="ring-legend-val">4 laufend</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jackpot Card -->
+    <div class="jackpot-card fu d2">
+      <div class="jc-eyebrow">Hauptauslosung · Samstag</div>
+      <div class="jc-game">SPD Sonderauslosung SOE 2026</div>
+      <div class="jc-amount"><span>25.000</span> €</div>
+      <div class="jc-sub">+ 10 × 500 € Sofortgewinne</div>
+      <div class="jc-countdown">
+        <div class="jc-cd"><div class="jc-cd-val" id="cd-d">03</div><div class="jc-cd-lbl">Tage</div></div>
+        <div class="jc-cd"><div class="jc-cd-val" id="cd-h">14</div><div class="jc-cd-lbl">Std</div></div>
+        <div class="jc-cd"><div class="jc-cd-val" id="cd-m">27</div><div class="jc-cd-lbl">Min</div></div>
+        <div class="jc-cd"><div class="jc-cd-val" id="cd-s">09</div><div class="jc-cd-lbl">Sek</div></div>
+      </div>
+      <button class="jc-btn"><i class="bi bi-ticket-perforated-fill"></i> Jetzt mitspielen</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row fu d2">
+      <div class="stat-card-dark">
+        <span class="stat-icon">🎟️</span>
+        <div class="stat-val-big">12</div>
+        <div class="stat-lbl-small">Lose gesamt</div>
+      </div>
+      <div class="stat-card-dark">
+        <span class="stat-icon" style="color:var(--gold);">🏆</span>
+        <div class="stat-val-big" style="color:var(--gold);">3</div>
+        <div class="stat-lbl-small">Gewinne</div>
+      </div>
+      <div class="stat-card-dark">
+        <span class="stat-icon" style="color:var(--green);">💶</span>
+        <div class="stat-val-big" style="color:var(--green);">75</div>
+        <div class="stat-lbl-small">Euro gewonnen</div>
+      </div>
+    </div>
+
+    <!-- Tippschein -->
+    <div class="sec-title-row fu d3">
+      <span class="t">Neuer Tippschein</span>
+      <span class="m">6 aus 49</span>
+    </div>
+
+    <div class="tipp-card fu d3">
+      <div class="tipp-card-head">
+        <div>
+          <div class="title">Zahlen wählen</div>
+          <div class="sub">Wähle 6 Zahlen von 1–49</div>
+        </div>
+        <span class="tipp-rnd">Reihe A</span>
+      </div>
+      <div class="tipp-body">
+        <div class="sel-row" id="sel-row"></div>
+        <div class="zahlen-grid-dark" id="zahlen-grid"></div>
+        <div class="tipp-btns">
+          <button class="tipp-btn-ghost" id="quick-btn">
+            <i class="bi bi-shuffle"></i> Quicktipp
+          </button>
+          <button class="tipp-btn-primary">
+            <i class="bi bi-check-circle-fill"></i> Einreichen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Letzte Ziehung -->
+    <div class="sec-title-row fu d3">
+      <span class="t">Letzte Ziehung</span>
+      <span class="m">12. Apr 2026</span>
+    </div>
+
+    <div class="ziehung-card-dark fu d3">
+      <div class="zd-head">
+        <div class="title">6 aus 49</div>
+        <div class="date"><i class="bi bi-calendar3 me-1"></i>Samstag</div>
+      </div>
+      <div class="lotto-balls-dark">
+        <div class="ball-dark bd-red">4</div>
+        <div class="ball-dark bd-red">13</div>
+        <div class="ball-dark bd-red">22</div>
+        <div class="ball-dark bd-red">31</div>
+        <div class="ball-dark bd-red">37</div>
+        <div class="ball-dark bd-red">45</div>
+        <div class="bd-sep">|</div>
+        <div>
+          <div class="ball-dark bd-zusatz ball-dark" style="font-size:.75rem;">7</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-size:.74rem;color:var(--text-3);">
+        <i class="bi bi-info-circle me-1"></i>Jackpot nicht geknackt · nächste Woche
+        <strong style="color:var(--red)">25.000 €</strong>
+      </div>
+    </div>
+
+    <!-- Weitere Spiele -->
+    <div class="sec-title-row fu d4">
+      <span class="t">Weitere Spiele</span>
+      <span class="m">Alle →</span>
+    </div>
+
+    <div class="h-scroll fu d4">
+      <div class="spiel-card">
+        <div class="sc-banner" style="background:linear-gradient(135deg,#6e0717,#C8102E);">🎲</div>
+        <div class="sc-body">
+          <div class="sc-name">EuroJackpot</div>
+          <div class="sc-jackpot">120 Mio. €</div>
+          <div class="sc-next">Fr · Di</div>
+        </div>
+      </div>
+      <div class="spiel-card">
+        <div class="sc-banner" style="background:linear-gradient(135deg,#1a3a6e,#2980b9);">🌀</div>
+        <div class="sc-body">
+          <div class="sc-name">KENO</div>
+          <div class="sc-jackpot">täglich</div>
+          <div class="sc-next">Mo – So</div>
+        </div>
+      </div>
+      <div class="spiel-card">
+        <div class="sc-banner" style="background:linear-gradient(135deg,#0a4a28,#27ae60);">🍀</div>
+        <div class="sc-body">
+          <div class="sc-name">Glücksspirale</div>
+          <div class="sc-jackpot">7.500 €/Monat</div>
+          <div class="sc-next">Samstag</div>
+        </div>
+      </div>
+      <div class="spiel-card">
+        <div class="sc-banner" style="background:linear-gradient(135deg,#4a2800,#e67e22);">✨</div>
+        <div class="sc-body">
+          <div class="sc-name">Sofortlotterie</div>
+          <div class="sc-jackpot">ab 1 €</div>
+          <div class="sc-next">Jederzeit</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meine Scheine -->
+    <div class="sec-title-row fu d5">
+      <span class="t">Meine Scheine</span>
+      <span class="m">Alle →</span>
+    </div>
+
+    <div class="schein-dark-list fu d5">
+      <div class="schein-dark-row">
+        <div class="sdr-icon" style="background:var(--red);"><i class="bi bi-ticket-perforated-fill"></i></div>
+        <div class="sdr-text">
+          <div class="sdr-name">SOE Hauptlos 2026</div>
+          <div class="sdr-meta">Los-Nr. 4872 · Ziehung 21.04.26</div>
+        </div>
+        <span class="sdr-status s-aktiv">Aktiv</span>
+        <i class="bi bi-chevron-right sdr-chevron"></i>
+      </div>
+      <div class="schein-dark-row">
+        <div class="sdr-icon" style="background:#2980b9;"><i class="bi bi-grid-3x3"></i></div>
+        <div class="sdr-text">
+          <div class="sdr-name">6 aus 49 – Dauerauftrag</div>
+          <div class="sdr-meta">4 Reihen · Mo &amp; Sa</div>
+        </div>
+        <span class="sdr-status s-aktiv">Aktiv</span>
+        <i class="bi bi-chevron-right sdr-chevron"></i>
+      </div>
+      <div class="schein-dark-row">
+        <div class="sdr-icon" style="background:#c9a000;"><i class="bi bi-globe2"></i></div>
+        <div class="sdr-text">
+          <div class="sdr-name">EuroJackpot</div>
+          <div class="sdr-meta">Ziehung 12.04.26 · 2 Reihen</div>
+        </div>
+        <span class="sdr-status s-gewinn">🎉 Gewinn!</span>
+        <i class="bi bi-chevron-right sdr-chevron"></i>
+      </div>
+      <div class="schein-dark-row">
+        <div class="sdr-icon" style="background:var(--bg-5);"><i class="bi bi-ticket-fill"></i></div>
+        <div class="sdr-text">
+          <div class="sdr-name">Glücksspirale</div>
+          <div class="sdr-meta">Ziehung 05.04.26 · abgelaufen</div>
+        </div>
+        <span class="sdr-status s-done">Abgelaufen</span>
+        <i class="bi bi-chevron-right sdr-chevron"></i>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ════ FIXED BOTTOM TAB BAR ════ -->
+  <nav id="bottom-nav" aria-label="Navigation">
+    <a href="#" class="nav-tab active">
+      <i class="bi bi-house-fill"></i>
+      <span>Start</span>
+    </a>
+    <a href="#" class="nav-tab">
+      <i class="bi bi-ticket-perforated-fill"></i>
+      <span>Tippen</span>
+    </a>
+    <a href="#" class="nav-tab">
+      <i class="bi bi-trophy-fill"></i>
+      <span>Ergebnisse</span>
+    </a>
+    <a href="#" class="nav-tab">
+      <i class="bi bi-collection-fill"></i>
+      <span>Meine Scheine</span>
+      <span class="nav-badge-dark">1</span>
+    </a>
+    <a href="#" class="nav-tab">
+      <i class="bi bi-person-fill"></i>
+      <span>Konto</span>
+    </a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* ── Zahlenfeld ── */
+    const grid = document.getElementById('zahlen-grid');
+    const selRow = document.getElementById('sel-row');
+    let selected = new Set();
+    const MAX = 6;
+
+    for (let i = 1; i <= 49; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'zahl-dark';
+      btn.textContent = i;
+      btn.dataset.n = i;
+      btn.addEventListener('click', () => {
+        if (selected.has(i)) {
+          selected.delete(i);
+          btn.classList.remove('gewaehlt');
+        } else {
+          if (selected.size >= MAX) return;
+          selected.add(i);
+          btn.classList.add('gewaehlt');
+        }
+        renderSel();
+      });
+      grid.appendChild(btn);
+    }
+
+    function renderSel() {
+      selRow.innerHTML = '';
+      const sorted = [...selected].sort((a, b) => a - b);
+      sorted.forEach(n => {
+        const b = document.createElement('div');
+        b.className = 'sel-ball-dark'; b.textContent = n;
+        selRow.appendChild(b);
+      });
+      for (let i = sorted.length; i < MAX; i++) {
+        const e = document.createElement('div');
+        e.className = 'sel-empty-dark'; e.textContent = '?';
+        selRow.appendChild(e);
+      }
+    }
+    renderSel();
+
+    /* ── Quicktipp ── */
+    document.getElementById('quick-btn').addEventListener('click', () => {
+      selected.clear();
+      document.querySelectorAll('.zahl-dark').forEach(b => b.classList.remove('gewaehlt'));
+      const pool = Array.from({length:49},(_,i)=>i+1);
+      for (let i = pool.length-1; i > 0; i--) {
+        const j = Math.floor(Math.random()*(i+1));
+        [pool[i],pool[j]] = [pool[j],pool[i]];
+      }
+      pool.slice(0,6).forEach(n => {
+        selected.add(n);
+        document.querySelector(`.zahl-dark[data-n="${n}"]`).classList.add('gewaehlt');
+      });
+      renderSel();
+    });
+
+    /* ── Bottom Nav ── */
+    document.querySelectorAll('.nav-tab').forEach(t => {
+      t.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+      });
+    });
+
+    /* ── Countdown ── */
+    function tick() {
+      const now = new Date();
+      const next = new Date(now);
+      next.setDate(next.getDate() + ((6-now.getDay()+7)%7||7));
+      next.setHours(19,25,0,0);
+      const diff = Math.max(0, next-now);
+      const pad = n => String(n).padStart(2,'0');
+      document.getElementById('cd-d').textContent = pad(Math.floor(diff/86400000));
+      document.getElementById('cd-h').textContent = pad(Math.floor((diff%86400000)/3600000));
+      document.getElementById('cd-m').textContent = pad(Math.floor((diff%3600000)/60000));
+      document.getElementById('cd-s').textContent = pad(Math.floor((diff%60000)/1000));
+    }
+    tick(); setInterval(tick, 1000);
+
+    /* ── Datum ── */
+    const days = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+    const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+    const now = new Date();
+    document.getElementById('greeting-day').textContent =
+      `${days[now.getDay()]}, ${now.getDate()}. ${months[now.getMonth()]}`;
+  </script>
+</body>
+</html>
